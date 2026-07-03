@@ -1,0 +1,321 @@
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { mockQuestions, mockTutors } from "../mockData";
+import GuestModal from "../components/GuestModal";
+
+const mockBids = [
+  {
+    tutorId: 1,
+    bidPrice: 22,
+    message:
+      "I've taught this topic to over 50 students — I'll walk you through it step by step with worked examples. I'm available today.",
+    accepted: false,
+  },
+  {
+    tutorId: 2,
+    bidPrice: 0,
+    message:
+      "Happy to help for free! I remember struggling with this exact topic. Let's hop on a quick call.",
+    accepted: false,
+  },
+  {
+    tutorId: 4,
+    bidPrice: 15,
+    message:
+      "I can share a great visual breakdown and some memory devices that really work for this. Let me help you!",
+    accepted: false,
+  },
+];
+
+const mockChat = [
+  { role: "student", text: "Hi! Can you explain the first step? I don't understand where the formula comes from.", time: "10:32 AM" },
+  { role: "tutor", text: "Of course! The quadratic formula is derived by completing the square on ax² + bx + c = 0. Let me show you the derivation step by step…", time: "10:35 AM" },
+  { role: "student", text: "Oh! I never knew it was derived that way. Makes much more sense now. What comes next?", time: "10:38 AM" },
+  { role: "tutor", text: "Great! Now let's plug in your specific example: a=2, b=-5, c=3. The discriminant b²-4ac = 25-24 = 1, so we get two real solutions…", time: "10:40 AM" },
+];
+
+export default function QuestionDetailPage({ user, onGuestAction }) {
+  const { id } = useParams();
+  const question = mockQuestions.find((q) => q.id === Number(id));
+  const [accepted, setAccepted] = useState(null);
+  const [chatMsg, setChatMsg] = useState("");
+  const [chatMessages, setChatMessages] = useState(mockChat);
+  const [showModal, setShowModal] = useState(false);
+
+  if (!question) {
+    return (
+      <div className="page" style={{ textAlign: "center", paddingTop: 80 }}>
+        <div style={{ fontSize: 64 }}>🔍</div>
+        <h2 style={{ marginTop: 16 }}>Question not found</h2>
+        <Link to="/browse" className="btn btn-primary" style={{ marginTop: 24 }}>Back to Browse</Link>
+      </div>
+    );
+  }
+
+  const getTutor = (tid) => mockTutors.find((t) => t.id === tid);
+
+  const handleAccept = (tutorId) => {
+    if (!user) { setShowModal(true); return; }
+    setAccepted(tutorId);
+  };
+
+  const sendChat = () => {
+    if (!user) { setShowModal(true); return; }
+    if (!chatMsg.trim()) return;
+    setChatMessages((p) => [...p, { role: user.role, text: chatMsg, time: "Just now" }]);
+    setChatMsg("");
+  };
+
+  const urgencyColors = { high: "var(--urgent-color)", medium: "var(--accent-warm)", low: "var(--success)" };
+
+  return (
+    <div className="page">
+      {showModal && <GuestModal onClose={() => setShowModal(false)} />}
+
+      {/* ── BACK ── */}
+      <div style={{ background: "white", borderBottom: "1px solid var(--border)", padding: "12px 0" }}>
+        <div className="container">
+          <Link to="/browse" style={{ color: "var(--text-secondary)", fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            ← Back to Browse
+          </Link>
+        </div>
+      </div>
+
+      <div className="container detail-layout">
+        {/* ── MAIN ── */}
+        <div className="detail-main">
+          {/* QUESTION HEADER */}
+          <div className="card detail-header">
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <span className="badge badge-subject">{question.subjectIcon} {question.subject}</span>
+              {question.isPaid ? (
+                <span className="badge badge-paid">💰 ${question.pricePerHour}/hr</span>
+              ) : (
+                <span className="badge badge-free">✅ FREE</span>
+              )}
+              <span className="badge badge-level">{question.level} — {question.grade}</span>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: urgencyColors[question.urgency],
+                }}
+              >
+                <span
+                  className={`urgency-dot urgency-${question.urgency}`}
+                  style={{ width: 8, height: 8, borderRadius: "50%", display: "inline-block", background: urgencyColors[question.urgency] }}
+                />
+                {question.urgency === "high" ? "Urgent" : question.urgency === "medium" ? "Soon" : "Flexible"}
+              </span>
+            </div>
+            <h1 className="detail-title">{question.title}</h1>
+            <div className="detail-meta">
+              <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
+                👤 Posted by <strong>{question.studentName}</strong>
+              </span>
+              <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
+                📅 Due {new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+              </span>
+              <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
+                💬 {question.responses} responses
+              </span>
+            </div>
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="card detail-description">
+            <h3>📄 Full Question</h3>
+            <p style={{ marginTop: 14 }}>{question.description}</p>
+            <div className="tags-row" style={{ marginTop: 20 }}>
+              {question.tags.map((t) => <span className="tag" key={t}>#{t}</span>)}
+            </div>
+          </div>
+
+          {/* HELPERS / BIDS */}
+          <div className="card helpers-section">
+            <div className="helpers-title">
+              🙋 {question.isPaid ? "Tutor Bids" : "Volunteers"} ({mockBids.length})
+              {!user && (
+                <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 400 }}>
+                  — Sign up to accept a helper
+                </span>
+              )}
+            </div>
+
+            {mockBids.map((bid, i) => {
+              const tutor = getTutor(bid.tutorId);
+              if (!tutor) return null;
+              const isAccepted = accepted === bid.tutorId;
+              return (
+                <div
+                  key={i}
+                  className="helper-card"
+                  style={isAccepted ? { borderColor: "var(--success)", background: "var(--success-light)" } : {}}
+                >
+                  <Link to={`/tutor/${tutor.id}`}>
+                    <div style={{ width: 52, height: 52, borderRadius: "50%", background: tutor.avatarColor + "22", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0 }}>
+                      {tutor.avatar}
+                    </div>
+                  </Link>
+                  <div className="helper-info">
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <Link to={`/tutor/${tutor.id}`}>
+                        <span className="helper-name">{tutor.name}</span>
+                      </Link>
+                      {tutor.isVerifiedTutor ? (
+                        <span className="badge badge-verified" style={{ fontSize: 11 }}>✓ Verified</span>
+                      ) : (
+                        <span className="badge badge-peer" style={{ fontSize: 11 }}>👥 Peer</span>
+                      )}
+                    </div>
+                    <div className="helper-bid">
+                      {bid.bidPrice === 0 ? (
+                        <span style={{ color: "var(--free-color)", fontWeight: 700 }}>✅ Offering free help</span>
+                      ) : (
+                        <span style={{ color: "var(--primary)", fontWeight: 700 }}>💰 ${bid.bidPrice}/hr</span>
+                      )}
+                      &nbsp;·&nbsp;
+                      <span style={{ color: "var(--accent-warm)" }}>{"★".repeat(Math.floor(tutor.rating))}</span>
+                      &nbsp;{tutor.rating}
+                    </div>
+                    <p className="helper-message">"{bid.message}"</p>
+                  </div>
+                  <div>
+                    {isAccepted ? (
+                      <span className="badge badge-free" style={{ padding: "8px 14px" }}>✅ Accepted</span>
+                    ) : (
+                      <button
+                        className="btn btn-sm btn-success"
+                        onClick={() => handleAccept(bid.tutorId)}
+                      >
+                        Accept
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {user?.role === "tutor" && !accepted && (
+              <div
+                style={{
+                  marginTop: 20,
+                  padding: "20px 24px",
+                  border: "2px dashed var(--primary)",
+                  borderRadius: "var(--radius-sm)",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  color: "var(--primary)",
+                  fontWeight: 600,
+                  fontSize: 14,
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = "var(--primary-light)"}
+                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                onClick={() => alert("In a real app, this would open a bid/offer form! 🎓")}
+              >
+                + Offer to help {question.isPaid ? `at your rate` : "for free"}
+              </div>
+            )}
+          </div>
+
+          {/* CHAT */}
+          <div className="card chat-thread">
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
+              💬 Discussion Thread
+            </h3>
+            {chatMessages.map((msg, i) => (
+              <div key={i}>
+                <div
+                  className={`chat-bubble ${msg.role === "student" ? "student" : "tutor"}`}
+                >
+                  {msg.text}
+                  <div className="chat-meta">{msg.time}</div>
+                </div>
+              </div>
+            ))}
+            <div className="chat-input-row">
+              <input
+                type="text"
+                placeholder={user ? "Type a reply…" : "Sign in to join the discussion"}
+                value={chatMsg}
+                onChange={(e) => setChatMsg(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendChat()}
+                disabled={!user}
+              />
+              <button onClick={sendChat} disabled={!user}>
+                Send →
+              </button>
+            </div>
+            {!user && (
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8, textAlign: "center" }}>
+                <button
+                  onClick={() => setShowModal(true)}
+                  style={{ background: "none", border: "none", color: "var(--primary)", textDecoration: "underline", cursor: "pointer", fontSize: 12 }}
+                >
+                  Sign up
+                </button>
+                {" "}to post in this thread
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* ── SIDEBAR ── */}
+        <div className="detail-sidebar">
+          {/* QUESTION INFO */}
+          <div className="card sidebar-card">
+            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>📋 Quick Info</h3>
+            {[
+              ["Subject", `${question.subjectIcon} ${question.subject}`],
+              ["Level", question.grade],
+              ["Deadline", new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })],
+              ["Help Type", question.isPaid ? `Paid — $${question.pricePerHour}/hr` : "Free"],
+              ["Responses", question.responses],
+              ["Status", question.status.charAt(0).toUpperCase() + question.status.slice(1)],
+            ].map(([label, value]) => (
+              <div key={label} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border)", fontSize: 14 }}>
+                <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>{label}</span>
+                <span style={{ fontWeight: 600 }}>{value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* STUDENT PROFILE */}
+          <div className="card sidebar-card">
+            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>👤 Asked by</h3>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 40, marginBottom: 10 }}>🧑🏽‍🎓</div>
+              <div style={{ fontWeight: 700 }}>{question.studentName}</div>
+              <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>{question.grade}</div>
+              <div style={{ fontSize: 13, color: "var(--text-muted)" }}>3 questions posted</div>
+            </div>
+          </div>
+
+          {/* OFFER TO HELP */}
+          {!user && (
+            <div className="card sidebar-card" style={{ background: "var(--primary)", color: "white" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎓</div>
+                <h3 style={{ fontWeight: 700, marginBottom: 8 }}>Can you help?</h3>
+                <p style={{ opacity: 0.85, fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
+                  Sign up to offer your expertise and earn money (or give back for free).
+                </p>
+                <button
+                  className="btn btn-ghost"
+                  style={{ width: "100%", justifyContent: "center" }}
+                  onClick={() => setShowModal(true)}
+                >
+                  Sign Up to Help →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
