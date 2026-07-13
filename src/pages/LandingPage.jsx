@@ -42,10 +42,10 @@ export default function LandingPage({ user }) {
   return (
     <div>
       {/* ── HERO ── */}
-      <section className="hero">
+      <section className="hero" style={{ overflow: "hidden", position: "relative" }}>
         <div className="hero-blob" />
-        <div className="container">
-          <div className="hero-content animate-up">
+        <div className="container" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "40px", alignItems: "center" }}>
+          <div className="hero-content animate-up" style={{ zIndex: 2 }}>
             <div className="hero-eyebrow">
               🐝 Study help for everyone — free or paid
             </div>
@@ -54,7 +54,7 @@ export default function LandingPage({ user }) {
               Get help from <span>real people.</span>
             </h1>
             <p className="hero-sub">
-              AskHive connects students and learners with tutors and fellow students
+              JONNE connects students and learners with tutors and fellow students
               who genuinely want to help. Post your question, set your price — or
               ask for free.
             </p>
@@ -80,7 +80,48 @@ export default function LandingPage({ user }) {
               )}
             </div>
           </div>
+
+          {/* Right Floating Elements (Desktop only) */}
+          <div className="hero-visual desktop-only" style={{ position: "relative", height: "360px", zIndex: 2 }}>
+            <div className="card glass-panel float-slow" style={{ position: "absolute", top: "10px", left: "20px", width: "280px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: "var(--radius-md)", background: "rgba(255,255,255,0.15)", color: "white", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}>
+              <div className="card-inner" style={{ padding: "16px 20px" }}>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
+                  <div style={{ background: "var(--accent)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>🧑‍💻</div>
+                  <div>
+                    <h4 style={{ fontSize: "14px", fontWeight: 700 }}>Python Flask API</h4>
+                    <span style={{ fontSize: "11px", opacity: 0.8 }}>Matched with Tutor Dave</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: "12px", opacity: 0.9, lineHeight: 1.5 }}>"Debugged in 15 mins! Highly recommended."</p>
+              </div>
+            </div>
+
+            <div className="card glass-panel float-delayed" style={{ position: "absolute", bottom: "20px", right: "10px", width: "260px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: "var(--radius-md)", background: "rgba(255,255,255,0.2)", color: "white", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}>
+              <div className="card-inner" style={{ padding: "16px 20px" }}>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
+                  <div style={{ background: "var(--free-color)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>📐</div>
+                  <div>
+                    <h4 style={{ fontSize: "14px", fontWeight: 700 }}>Algebra Help</h4>
+                    <span className="badge badge-free" style={{ padding: "1px 6px", fontSize: "9px" }}>FREE</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: "12px", opacity: 0.9, lineHeight: 1.5 }}>"Mitosis vs Meiosis diagram uploaded!"</p>
+              </div>
+            </div>
+          </div>
         </div>
+        
+        {/* Style block for responsive grid */}
+        <style>{`
+          @media (max-width: 900px) {
+            .hero > .container {
+              grid-template-columns: 1fr !important;
+            }
+            .hero-visual {
+              display: none !important;
+            }
+          }
+        `}</style>
       </section>
 
       {/* ── STATS BAR ── */}
@@ -157,7 +198,7 @@ export default function LandingPage({ user }) {
       {/* ── HOW IT WORKS ── */}
       <section className="how-section" style={{ background: "white" }}>
         <div className="container">
-          <h2 className="section-title">How AskHive works</h2>
+          <h2 className="section-title">How JONNE works</h2>
           <p className="section-sub">Three simple steps to get unstuck.</p>
           <div className="steps-grid">
             {howSteps.map((step) => (
@@ -232,11 +273,11 @@ export default function LandingPage({ user }) {
       <section style={{ background: "var(--bg-main)", padding: "80px 0" }}>
         <div className="container">
           <h2 className="section-title">What learners say</h2>
-          <p className="section-sub">Real stories from the AskHive community.</p>
+          <p className="section-sub">Real stories from the JONNE community.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
             {[
               { text: "I was panicking about my physics exam and posted at midnight. By 8am I had 3 tutors offering help. Ended up passing with flying colours.", author: "Priya S. — Grade 12", avatar: "🧑🏽‍🎓" },
-              { text: "I'm 34 and going back to study economics after years away. AskHive makes me feel like I'm not alone — no judgment, just help.", author: "Rachel T. — Adult Learner", avatar: "👩🏼‍💼" },
+              { text: "I'm 34 and going back to study economics after years away. JONNE makes me feel like I'm not alone — no judgment, just help.", author: "Rachel T. — Adult Learner", avatar: "👩🏼‍💼" },
               { text: "As a tutor, I love that I can choose to help for free sometimes. The impact counter is a nice touch — I've helped 45 students!", author: "Ayaan P. — Peer Helper", avatar: "🧑🏾‍🔬" },
             ].map((r, i) => (
               <div className="card" key={i}>
@@ -258,7 +299,7 @@ export default function LandingPage({ user }) {
         <div className="container">
           <h2 style={{ fontSize: 36, fontWeight: 900, marginBottom: 16 }}>Ready to stop being stuck?</h2>
           <p style={{ opacity: 0.88, fontSize: 18, marginBottom: 40, maxWidth: 480, margin: "0 auto 40px" }}>
-            Join thousands of learners who've already found their spark with AskHive.
+            Join thousands of learners who've already found their spark with JONNE.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/login" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
@@ -271,13 +312,6 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-logo">🐝 AskHive</div>
-          <small>© 2026 AskHive · Prototype / Demo · No real payments or data</small>
-        </div>
-      </footer>
     </div>
   );
 }

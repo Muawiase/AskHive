@@ -11,6 +11,10 @@ import StudentDashboard from "./pages/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard";
 import GuestModal from "./components/GuestModal";
 import { mockUsers } from "./mockData";
+import AboutPage from "./pages/AboutPage";
+import FAQPage from "./pages/FAQPage";
+import ContactPage from "./pages/ContactPage";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [user, setUser] = useState(null); // null = guest
@@ -77,8 +81,12 @@ export default function App() {
           path="/dashboard/tutor"
           element={user?.role === "tutor" ? <TutorDashboard user={user} /> : <Navigate to="/login" />}
         />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

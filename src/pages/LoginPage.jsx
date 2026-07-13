@@ -25,12 +25,25 @@ export default function LoginPage({ onLogin, user }) {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
+    <div className="login-page" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, var(--bg-main) 0%, rgba(108,99,255,0.05) 100%)" }}>
+      {/* Background blobs for depth */}
+      <div style={{ position: "absolute", top: "-10%", left: "-10%", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
+      
+      <div className="login-card glass-panel" style={{ zIndex: 1, border: "1px solid rgba(255,255,255,0.6)", borderRadius: "var(--radius-lg)", background: "rgba(255,255,255,0.85)" }}>
         <div className="login-logo">
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🐝</div>
-          <div className="logo-text">AskHive</div>
-          <p style={{ color: "var(--text-secondary)", fontSize: 14, marginTop: 8 }}>
+          <img
+            src="/logo.png"
+            alt="JONNE"
+            style={{
+              height: "60px",
+              width: "auto",
+              objectFit: "contain",
+              display: "block",
+              margin: "0 auto 12px",
+            }}
+          />
+          <p style={{ color: "var(--text-secondary)", fontSize: 14, marginTop: 4 }}>
             {mode === "login" ? "Welcome back! Ready to learn?" : "Join thousands of learners today."}
           </p>
         </div>
