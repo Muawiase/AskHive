@@ -9,6 +9,7 @@ import QuestionDetailPage from "./pages/QuestionDetailPage";
 import TutorProfilePage from "./pages/TutorProfilePage";
 import StudentDashboard from "./pages/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import GuestModal from "./components/GuestModal";
 import { mockUsers } from "./mockData";
 import AboutPage from "./pages/AboutPage";
@@ -22,7 +23,11 @@ export default function App() {
   const [questions, setQuestions] = useState(null); // managed in Browse
 
   const login = (role) => {
-    setUser(role === "tutor" ? mockUsers.tutor : mockUsers.student);
+    if (role === "admin") {
+      setUser(mockUsers.admin);
+    } else {
+      setUser(role === "tutor" ? mockUsers.tutor : mockUsers.student);
+    }
   };
 
   const logout = () => setUser(null);
@@ -80,6 +85,10 @@ export default function App() {
         <Route
           path="/dashboard/tutor"
           element={user?.role === "tutor" ? <TutorDashboard user={user} /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/dashboard/admin"
+          element={user?.role === "admin" ? <AdminDashboard user={user} /> : <Navigate to="/login" />}
         />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/faq" element={<FAQPage />} />

@@ -11,7 +11,11 @@ export default function LoginPage({ onLogin, user }) {
   const [submitted, setSubmitted] = useState(false);
 
   if (user) {
-    navigate(user.role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
+    if (user.role === "admin") {
+      navigate("/dashboard/admin");
+    } else {
+      navigate(user.role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
+    }
     return null;
   }
 
@@ -20,7 +24,11 @@ export default function LoginPage({ onLogin, user }) {
     setSubmitted(true);
     setTimeout(() => {
       onLogin(role);
-      navigate(role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
+      if (role === "admin") {
+        navigate("/dashboard/admin");
+      } else {
+        navigate(role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
+      }
     }, 800);
   };
 
@@ -104,11 +112,12 @@ export default function LoginPage({ onLogin, user }) {
 
           <div className="form-group">
             <label className="form-label">I am a…</label>
-            <div className="role-selector">
+            <div className="role-selector" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
               <button
                 type="button"
                 className={`role-btn ${role === "student" ? "active" : ""}`}
                 onClick={() => setRole("student")}
+                style={{ padding: "8px 4px", fontSize: "12px" }}
               >
                 Student / Learner
               </button>
@@ -116,14 +125,25 @@ export default function LoginPage({ onLogin, user }) {
                 type="button"
                 className={`role-btn ${role === "tutor" ? "active" : ""}`}
                 onClick={() => setRole("tutor")}
+                style={{ padding: "8px 4px", fontSize: "12px" }}
               >
                 Tutor / Helper
+              </button>
+              <button
+                type="button"
+                className={`role-btn ${role === "admin" ? "active" : ""}`}
+                onClick={() => setRole("admin")}
+                style={{ padding: "8px 4px", fontSize: "12px" }}
+              >
+                Admin
               </button>
             </div>
             <p className="form-hint">
               {role === "student"
                 ? "You'll be able to post questions and find help."
-                : "You'll be able to browse questions and offer your expertise."}
+                : role === "tutor"
+                ? "You'll be able to browse questions and offer your expertise."
+                : "Full access to platform diagnostics and configuration panels."}
             </p>
           </div>
 

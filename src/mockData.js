@@ -343,7 +343,100 @@ export const mockUsers = {
     activeJobs: [2, 9],
     joinedAt: "2025-09-10",
   },
+  admin: {
+    id: 3,
+    name: "Alex Mercer",
+    email: "admin@jonne.com",
+    role: "admin",
+    avatar: "⚙️",
+    avatarColor: "#2C3E50",
+    joinedAt: "2024-01-01",
+  },
 };
+
+// ─── MOCK TRANSACTIONS ─────────────────────────────────────────────────────────
+export const mockPlatformTransactions = [
+  {
+    id: "TXN-8821",
+    studentName: "Amara K.",
+    tutorName: "Dr. Fatima Al-Hassan",
+    amount: 20,
+    date: "2026-07-01T10:00:00Z",
+    status: "completed",
+    subject: "Mathematics",
+  },
+  {
+    id: "TXN-8822",
+    studentName: "Sophie L.",
+    tutorName: "Marcus Chen",
+    amount: 35,
+    date: "2026-07-03T09:45:00Z",
+    status: "completed",
+    subject: "Coding",
+  },
+  {
+    id: "TXN-8823",
+    studentName: "Daniel O.",
+    tutorName: "Dr. Fatima Al-Hassan",
+    amount: 18,
+    date: "2026-07-03T08:00:00Z",
+    status: "pending",
+    subject: "Coding",
+  },
+  {
+    id: "TXN-8824",
+    studentName: "Rachel T.",
+    tutorName: "Marcus Chen",
+    amount: 60,
+    date: "2026-07-04T14:20:00Z",
+    status: "completed",
+    subject: "Economics",
+  },
+  {
+    id: "TXN-8825",
+    studentName: "Priya S.",
+    tutorName: "Isabelle Moreau",
+    amount: 15,
+    date: "2026-07-02T11:15:00Z",
+    status: "refunded",
+    subject: "Languages",
+  }
+];
+
+// ─── MOCK REPORTS ──────────────────────────────────────────────────────────────
+export const mockReports = [
+  {
+    id: 1,
+    type: "question",
+    targetId: 2,
+    targetTitle: "Need help debugging my Python Flask REST API",
+    reason: "Contains spam links in description",
+    reportedBy: "Dr. Fatima Al-Hassan",
+    reportedAt: "2026-07-03T11:20:00Z",
+    status: "pending"
+  },
+  {
+    id: 2,
+    type: "review",
+    targetId: 1,
+    targetTitle: "Review by Sophie L. on Dr. Fatima Al-Hassan",
+    reason: "Abusive language / harassment",
+    reportedBy: "Dr. Fatima Al-Hassan",
+    reportedAt: "2026-07-04T09:10:00Z",
+    status: "pending"
+  },
+  {
+    id: 3,
+    type: "user",
+    targetId: 4,
+    targetTitle: "Keita N. (Student)",
+    reason: "Posting copy-pasted homework assignments in bulk",
+    reportedBy: "Isabelle Moreau",
+    reportedAt: "2026-07-02T15:30:00Z",
+    status: "resolved"
+  }
+];
+
 
 // ─── SUBJECTS LIST ────────────────────────────────────────────────────────────
 export const subjects = [

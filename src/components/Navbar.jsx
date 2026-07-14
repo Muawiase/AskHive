@@ -10,7 +10,7 @@ export default function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const dashboardPath = user?.role === "tutor" ? "/dashboard/tutor" : "/dashboard/student";
+  const dashboardPath = user?.role === "admin" ? "/dashboard/admin" : user?.role === "tutor" ? "/dashboard/tutor" : "/dashboard/student";
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -126,7 +126,7 @@ export default function Navbar({ user, onLogout }) {
                   </div>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: "14px" }}>{user.name}</div>
-                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{user.role === "tutor" ? "Tutor" : "Student"}</div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{user.role === "admin" ? "Admin" : user.role === "tutor" ? "Tutor" : "Student"}</div>
                   </div>
                 </div>
                 {user.role === "student" && (
