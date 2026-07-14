@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { mockQuestions } from "../mockData";
 
-// ─── MOCK DATA ──────────────────────────────────────────────────────────────
+//  MOCK DATA 
 const myQuestions = [
   ...mockQuestions.filter((q) => q.studentId === 1 || q.studentId === 4).slice(0, 4),
   { ...mockQuestions[5], status: "solved", studentId: 1 },
@@ -12,7 +12,7 @@ const mockBids = [
   {
     id: 1,
     tutor: "Dr. Fatima Al-Hassan",
-    avatar: "👩🏽‍🏫",
+    avatar: "",
     color: "#6C63FF",
     question: "How do I solve quadratic equations using the quadratic formula?",
     questionId: 1,
@@ -27,7 +27,7 @@ const mockBids = [
   {
     id: 2,
     tutor: "Zara Williams",
-    avatar: "👩🏿‍📚",
+    avatar: "",
     color: "#A29BFE",
     question: "How do I solve quadratic equations using the quadratic formula?",
     questionId: 1,
@@ -42,7 +42,7 @@ const mockBids = [
   {
     id: 3,
     tutor: "James K.",
-    avatar: "👨🏻‍💻",
+    avatar: "",
     color: "#00CEC9",
     question: "Explain the causes and consequences of the French Revolution",
     questionId: 3,
@@ -94,7 +94,7 @@ const mockDownloads = [
     id: 1,
     title: "Quadratic Formula – Step-by-Step Guide",
     type: "PDF",
-    icon: "📄",
+    icon: "",
     size: "1.2 MB",
     tutor: "Dr. Fatima Al-Hassan",
     date: "2026-07-01",
@@ -104,7 +104,7 @@ const mockDownloads = [
     id: 2,
     title: "French Revolution – Summary Notes",
     type: "DOCX",
-    icon: "📝",
+    icon: "",
     size: "890 KB",
     tutor: "James K.",
     date: "2026-06-29",
@@ -114,7 +114,7 @@ const mockDownloads = [
     id: 3,
     title: "Session Recording – Algebra Review",
     type: "MP4",
-    icon: "🎥",
+    icon: "",
     size: "248 MB",
     tutor: "Dr. Fatima Al-Hassan",
     date: "2026-07-01",
@@ -124,7 +124,7 @@ const mockDownloads = [
     id: 4,
     title: "Python Flask Cheat Sheet",
     type: "PDF",
-    icon: "📄",
+    icon: "",
     size: "320 KB",
     tutor: "David R.",
     date: "2026-07-03",
@@ -136,7 +136,7 @@ const mockNotifications = [
   {
     id: 1,
     type: "bid",
-    icon: "💬",
+    icon: "",
     color: "#6C63FF",
     title: "New bid on your question",
     body: "Dr. Fatima Al-Hassan submitted a bid for \"Quadratic Equations\"",
@@ -146,7 +146,7 @@ const mockNotifications = [
   {
     id: 2,
     type: "bid",
-    icon: "💬",
+    icon: "",
     color: "#A29BFE",
     title: "New bid on your question",
     body: "Zara Williams submitted a FREE bid for \"Quadratic Equations\"",
@@ -156,7 +156,7 @@ const mockNotifications = [
   {
     id: 3,
     type: "payment",
-    icon: "✅",
+    icon: "",
     color: "#4CAF50",
     title: "Payment confirmed",
     body: "Your payment of $20 to Dr. Fatima Al-Hassan was successful.",
@@ -166,7 +166,7 @@ const mockNotifications = [
   {
     id: 4,
     type: "download",
-    icon: "📥",
+    icon: "",
     color: "#2196F3",
     title: "File ready to download",
     body: "Session notes from James K. are now available.",
@@ -176,7 +176,7 @@ const mockNotifications = [
   {
     id: 5,
     type: "system",
-    icon: "🎉",
+    icon: "",
     color: "#FF9800",
     title: "Question solved!",
     body: "Your question on the French Revolution has been marked as solved.",
@@ -186,23 +186,23 @@ const mockNotifications = [
 ];
 
 const statusConfig = {
-  open: { label: "Open", cls: "status-open", icon: "🔓", color: "#4CAF50" },
-  "in-progress": { label: "In Progress", cls: "status-in-progress", icon: "⚡", color: "#FF9800" },
-  solved: { label: "Solved", cls: "status-solved", icon: "✅", color: "#2196F3" },
+  open: { label: "Open", cls: "status-open", icon: "", color: "#4CAF50" },
+  "in-progress": { label: "In Progress", cls: "status-in-progress", icon: "", color: "#FF9800" },
+  solved: { label: "Solved", cls: "status-solved", icon: "", color: "#2196F3" },
 };
 
 const NAV_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: "🏠" },
-  { id: "post", label: "Post Question", icon: "✏️" },
-  { id: "my-questions", label: "My Questions", icon: "📋" },
-  { id: "bids", label: "Bids", icon: "💬", badge: mockBids.filter((b) => b.status === "pending").length },
-  { id: "payments", label: "Payments", icon: "💳" },
-  { id: "downloads", label: "Downloads", icon: "📥" },
-  { id: "notifications", label: "Notifications", icon: "🔔", badge: mockNotifications.filter((n) => !n.read).length },
-  { id: "profile", label: "Profile", icon: "👤" },
+  { id: "dashboard", label: "Dashboard", icon: "" },
+  { id: "post", label: "Post Question", icon: "" },
+  { id: "my-questions", label: "My Questions", icon: "" },
+  { id: "bids", label: "Bids", icon: "", badge: mockBids.filter((b) => b.status === "pending").length },
+  { id: "payments", label: "Payments", icon: "" },
+  { id: "downloads", label: "Downloads", icon: "" },
+  { id: "notifications", label: "Notifications", icon: "", badge: mockNotifications.filter((n) => !n.read).length },
+  { id: "profile", label: "Profile", icon: "" },
 ];
 
-// ─── SECTIONS ────────────────────────────────────────────────────────────────
+//  SECTIONS 
 
 function DashboardHome({ user, setActive }) {
   const open = myQuestions.filter((q) => q.status === "open");
@@ -215,23 +215,23 @@ function DashboardHome({ user, setActive }) {
       {/* Welcome Banner */}
       <div className="sd-welcome-banner">
         <div className="sd-welcome-text">
-          <h1>👋 Welcome back, {user.name.split(" ")[0]}!</h1>
+          <h1> Welcome back, {user.name.split(" ")[0]}!</h1>
           <p>Track your questions, manage bids, and stay on top of your learning journey.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setActive("post")}>
-          ✏️ Post a Question
+           Post a Question
         </button>
       </div>
 
       {/* Stats Row */}
       <div className="sd-stats-grid">
         {[
-          { icon: "📋", num: myQuestions.length, label: "Total Questions", color: "#6C63FF", onClick: () => setActive("my-questions") },
-          { icon: "🔓", num: open.length, label: "Open", color: "#4CAF50", onClick: () => setActive("my-questions") },
-          { icon: "⚡", num: inProgress.length, label: "In Progress", color: "#FF9800", onClick: () => setActive("my-questions") },
-          { icon: "✅", num: solved.length, label: "Solved", color: "#2196F3", onClick: () => setActive("my-questions") },
-          { icon: "💬", num: mockBids.length, label: "Total Bids", color: "#E91E63", onClick: () => setActive("bids") },
-          { icon: "🔔", num: unread, label: "Unread Alerts", color: "#FF5722", onClick: () => setActive("notifications") },
+          { icon: "", num: myQuestions.length, label: "Total Questions", color: "#6C63FF", onClick: () => setActive("my-questions") },
+          { icon: "", num: open.length, label: "Open", color: "#4CAF50", onClick: () => setActive("my-questions") },
+          { icon: "", num: inProgress.length, label: "In Progress", color: "#FF9800", onClick: () => setActive("my-questions") },
+          { icon: "", num: solved.length, label: "Solved", color: "#2196F3", onClick: () => setActive("my-questions") },
+          { icon: "", num: mockBids.length, label: "Total Bids", color: "#E91E63", onClick: () => setActive("bids") },
+          { icon: "", num: unread, label: "Unread Alerts", color: "#FF5722", onClick: () => setActive("notifications") },
         ].map((s) => (
           <div className="sd-stat-card" key={s.label} onClick={s.onClick} style={{ "--accent-color": s.color }}>
             <div className="sd-stat-icon" style={{ background: s.color + "18", color: s.color }}>{s.icon}</div>
@@ -244,7 +244,7 @@ function DashboardHome({ user, setActive }) {
       {/* Recent Questions */}
       <div className="sd-widget">
         <div className="sd-widget-header">
-          <h2>📋 Recent Questions</h2>
+          <h2> Recent Questions</h2>
           <button className="sd-link-btn" onClick={() => setActive("my-questions")}>View all →</button>
         </div>
         <div className="sd-list">
@@ -257,8 +257,8 @@ function DashboardHome({ user, setActive }) {
                   <Link to={`/question/${q.id}`} className="sd-list-title">{q.title}</Link>
                   <div className="sd-list-meta">
                     <span className="sd-pill" style={{ background: sc.color + "18", color: sc.color }}>{sc.icon} {sc.label}</span>
-                    <span>💬 {q.responses} bids</span>
-                    <span>📅 Due {new Date(q.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
+                    <span> {q.responses} bids</span>
+                    <span> Due {new Date(q.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
                   </div>
                 </div>
                 <Link to={`/question/${q.id}`}><button className="btn btn-sm btn-secondary">View →</button></Link>
@@ -271,7 +271,7 @@ function DashboardHome({ user, setActive }) {
       {/* Recent Notifications */}
       <div className="sd-widget">
         <div className="sd-widget-header">
-          <h2>🔔 Recent Notifications</h2>
+          <h2> Recent Notifications</h2>
           <button className="sd-link-btn" onClick={() => setActive("notifications")}>View all →</button>
         </div>
         <div className="sd-list">
@@ -310,11 +310,11 @@ function PostQuestionSection({ user }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>✏️ Post a Question</h1>
+        <h1> Post a Question</h1>
         <p>Describe your question clearly and let expert tutors bid on it.</p>
       </div>
       {submitted && (
-        <div className="sd-alert sd-alert-success">✅ Your question has been posted! Tutors will start bidding soon.</div>
+        <div className="sd-alert sd-alert-success"> Your question has been posted! Tutors will start bidding soon.</div>
       )}
       <div className="sd-form-card">
         <form onSubmit={handleSubmit} className="sd-form">
@@ -398,7 +398,7 @@ function PostQuestionSection({ user }) {
             )}
           </div>
           <div className="sd-form-actions">
-            <button type="submit" className="btn btn-primary btn-lg">🚀 Submit Question</button>
+            <button type="submit" className="btn btn-primary btn-lg"> Submit Question</button>
           </div>
         </form>
       </div>
@@ -413,15 +413,15 @@ function MyQuestionsSection() {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>📋 My Questions</h1>
+        <h1> My Questions</h1>
         <p>All questions you've posted on JONNE.</p>
       </div>
       <div className="sd-filter-tabs">
         {[
           { value: "all", label: "All" },
-          { value: "open", label: "🔓 Open" },
-          { value: "in-progress", label: "⚡ In Progress" },
-          { value: "solved", label: "✅ Solved" },
+          { value: "open", label: " Open" },
+          { value: "in-progress", label: " In Progress" },
+          { value: "solved", label: " Solved" },
         ].map((t) => (
           <button
             key={t.value}
@@ -445,9 +445,9 @@ function MyQuestionsSection() {
                   <span className="sd-pill" style={{ background: sc.color + "18", color: sc.color }}>{sc.icon} {sc.label}</span>
                   <span className="sd-pill" style={{ background: "#6C63FF18", color: "#6C63FF" }}>{q.subjectIcon} {q.subject}</span>
                   {q.isPaid ? (
-                    <span className="sd-pill" style={{ background: "#2196F318", color: "#2196F3" }}>💰 ${q.pricePerHour}/hr</span>
+                    <span className="sd-pill" style={{ background: "#2196F318", color: "#2196F3" }}> ${q.pricePerHour}/hr</span>
                   ) : (
-                    <span className="sd-pill" style={{ background: "#4CAF5018", color: "#4CAF50" }}>✅ FREE</span>
+                    <span className="sd-pill" style={{ background: "#4CAF5018", color: "#4CAF50" }}> FREE</span>
                   )}
                 </div>
               </div>
@@ -455,9 +455,9 @@ function MyQuestionsSection() {
               <p className="sd-question-excerpt">{q.description}</p>
               <div className="sd-question-footer">
                 <div className="sd-question-meta">
-                  <span>💬 {q.responses} bids</span>
-                  <span>📅 Due {new Date(q.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
-                  <span>🏷️ {q.level}</span>
+                  <span> {q.responses} bids</span>
+                  <span> Due {new Date(q.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
+                  <span> {q.level}</span>
                 </div>
                 <div style={{ display: "flex", gap: 8 }}>
                   <Link to={`/question/${q.id}`}><button className="btn btn-sm btn-primary">View →</button></Link>
@@ -468,7 +468,7 @@ function MyQuestionsSection() {
         })}
         {filtered.length === 0 && (
           <div className="sd-empty">
-            <div className="sd-empty-icon">📭</div>
+            <div className="sd-empty-icon"></div>
             <div className="sd-empty-title">No questions here</div>
             <div className="sd-empty-sub">Questions with this status will appear here.</div>
           </div>
@@ -486,21 +486,21 @@ function BidsSection({ setActive }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>💬 Bids</h1>
+        <h1> Bids</h1>
         <p>Review tutor bids on your questions and accept the best match.</p>
       </div>
 
       {pending.length > 0 && (
         <>
-          <h2 className="sd-subheading">⏳ Pending Bids ({pending.length})</h2>
+          <h2 className="sd-subheading"> Pending Bids ({pending.length})</h2>
           <div className="sd-bids-grid">
             {pending.map((bid) => (
               <div className={`sd-bid-card ${selected === bid.id ? "sd-bid-selected" : ""}`} key={bid.id} onClick={() => setSelected(bid.id === selected ? null : bid.id)}>
                 <div className="sd-bid-header">
                   <div className="sd-bid-avatar" style={{ background: bid.color + "22", color: bid.color }}>{bid.avatar}</div>
                   <div className="sd-bid-info">
-                    <div className="sd-bid-name">{bid.tutor} {bid.isVerified && <span className="sd-verified-tag">✓ Verified</span>}</div>
-                    <div className="sd-bid-rating">★ {bid.rating} · {bid.reviews} reviews</div>
+                    <div className="sd-bid-name">{bid.tutor} {bid.isVerified && <span className="sd-verified-tag"> Verified</span>}</div>
+                    <div className="sd-bid-rating"> {bid.rating} · {bid.reviews} reviews</div>
                   </div>
                   <div className="sd-bid-rate" style={{ background: bid.rate === "FREE" ? "#4CAF5018" : "#2196F318", color: bid.rate === "FREE" ? "#4CAF50" : "#2196F3" }}>
                     {bid.rate}
@@ -509,8 +509,8 @@ function BidsSection({ setActive }) {
                 <div className="sd-bid-question">For: "{bid.question.slice(0, 55)}..."</div>
                 <p className="sd-bid-message">"{bid.message}"</p>
                 <div className="sd-bid-actions">
-                  <button className="btn btn-primary btn-sm">✅ Accept Bid</button>
-                  <button className="btn btn-secondary btn-sm">❌ Decline</button>
+                  <button className="btn btn-primary btn-sm"> Accept Bid</button>
+                  <button className="btn btn-secondary btn-sm"> Decline</button>
                   <Link to={`/question/${bid.questionId}`}><button className="btn btn-sm" style={{ background: "#f5f5f5", color: "#404040" }}>View Q →</button></Link>
                 </div>
               </div>
@@ -521,23 +521,23 @@ function BidsSection({ setActive }) {
 
       {accepted.length > 0 && (
         <>
-          <h2 className="sd-subheading" style={{ marginTop: 32 }}>✅ Accepted Bids ({accepted.length})</h2>
+          <h2 className="sd-subheading" style={{ marginTop: 32 }}> Accepted Bids ({accepted.length})</h2>
           <div className="sd-bids-grid">
             {accepted.map((bid) => (
               <div className="sd-bid-card sd-bid-accepted" key={bid.id}>
                 <div className="sd-bid-header">
                   <div className="sd-bid-avatar" style={{ background: bid.color + "22", color: bid.color }}>{bid.avatar}</div>
                   <div className="sd-bid-info">
-                    <div className="sd-bid-name">{bid.tutor} {bid.isVerified && <span className="sd-verified-tag">✓ Verified</span>}</div>
-                    <div className="sd-bid-rating">★ {bid.rating} · {bid.reviews} reviews</div>
+                    <div className="sd-bid-name">{bid.tutor} {bid.isVerified && <span className="sd-verified-tag"> Verified</span>}</div>
+                    <div className="sd-bid-rating"> {bid.rating} · {bid.reviews} reviews</div>
                   </div>
-                  <div className="sd-bid-rate" style={{ background: "#4CAF5018", color: "#4CAF50" }}>✅ Accepted</div>
+                  <div className="sd-bid-rate" style={{ background: "#4CAF5018", color: "#4CAF50" }}> Accepted</div>
                 </div>
                 <div className="sd-bid-question">For: "{bid.question.slice(0, 55)}..."</div>
                 <p className="sd-bid-message">"{bid.message}"</p>
                 <div className="sd-bid-actions">
-                  <button className="btn btn-primary btn-sm">💬 Message Tutor</button>
-                  <button className="btn btn-secondary btn-sm">📅 Schedule Session</button>
+                  <button className="btn btn-primary btn-sm"> Message Tutor</button>
+                  <button className="btn btn-secondary btn-sm"> Schedule Session</button>
                 </div>
               </div>
             ))}
@@ -554,15 +554,15 @@ function PaymentsSection() {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>💳 Payments</h1>
+        <h1> Payments</h1>
         <p>Manage your payment history and billing information.</p>
       </div>
 
       <div className="sd-stats-grid" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
         {[
-          { icon: "💵", num: `$${total}`, label: "Total Spent", color: "#4CAF50" },
-          { icon: "✅", num: mockPayments.filter((p) => p.status === "completed").length, label: "Completed", color: "#2196F3" },
-          { icon: "⏳", num: mockPayments.filter((p) => p.status === "pending").length, label: "Pending", color: "#FF9800" },
+          { icon: "", num: `$${total}`, label: "Total Spent", color: "#4CAF50" },
+          { icon: "", num: mockPayments.filter((p) => p.status === "completed").length, label: "Completed", color: "#2196F3" },
+          { icon: "", num: mockPayments.filter((p) => p.status === "pending").length, label: "Pending", color: "#FF9800" },
         ].map((s) => (
           <div className="sd-stat-card" key={s.label} style={{ "--accent-color": s.color }}>
             <div className="sd-stat-icon" style={{ background: s.color + "18", color: s.color }}>{s.icon}</div>
@@ -573,7 +573,7 @@ function PaymentsSection() {
       </div>
 
       <div className="sd-widget">
-        <div className="sd-widget-header"><h2>📜 Transaction History</h2></div>
+        <div className="sd-widget-header"><h2> Transaction History</h2></div>
         <div className="sd-payments-table">
           <div className="sd-table-head">
             <span>Description</span>
@@ -601,7 +601,7 @@ function PaymentsSection() {
                     color: p.status === "completed" ? "#4CAF50" : "#FF9800",
                   }}
                 >
-                  {p.status === "completed" ? "✅ Paid" : "⏳ Pending"}
+                  {p.status === "completed" ? " Paid" : " Pending"}
                 </span>
               </span>
             </div>
@@ -610,10 +610,10 @@ function PaymentsSection() {
       </div>
 
       <div className="sd-widget">
-        <div className="sd-widget-header"><h2>💳 Saved Payment Method</h2></div>
+        <div className="sd-widget-header"><h2> Saved Payment Method</h2></div>
         <div className="sd-payment-method">
           <div className="sd-card-chip">
-            <span className="sd-card-icon">💳</span>
+            <span className="sd-card-icon"></span>
             <div>
               <div style={{ fontWeight: 700 }}>Visa •••• 4242</div>
               <div style={{ fontSize: 13, color: "var(--text-muted)" }}>Expires 09/28</div>
@@ -630,7 +630,7 @@ function DownloadsSection() {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>📥 Downloads</h1>
+        <h1> Downloads</h1>
         <p>Access notes, recordings, and files shared by your tutors.</p>
       </div>
       <div className="sd-downloads-grid">
@@ -645,10 +645,10 @@ function DownloadsSection() {
                 <span>by {file.tutor}</span>
               </div>
               <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>
-                📅 {new Date(file.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                 {new Date(file.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
               </div>
             </div>
-            <button className="btn btn-primary btn-sm sd-download-btn">⬇️ Download</button>
+            <button className="btn btn-primary btn-sm sd-download-btn"> Download</button>
           </div>
         ))}
       </div>
@@ -665,12 +665,12 @@ function NotificationsSection() {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>🔔 Notifications</h1>
+        <h1> Notifications</h1>
         <p>{unread > 0 ? `You have ${unread} unread notification${unread > 1 ? "s" : ""}.` : "You're all caught up!"}</p>
       </div>
       {unread > 0 && (
         <button className="btn btn-secondary btn-sm" style={{ marginBottom: 20 }} onClick={markAllRead}>
-          ✅ Mark all as read
+           Mark all as read
         </button>
       )}
       <div className="sd-notif-list">
@@ -707,7 +707,7 @@ function ProfileSection({ user }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>👤 My Profile</h1>
+        <h1> My Profile</h1>
         <p>Manage your personal details and preferences.</p>
       </div>
       <div className="sd-profile-layout">
@@ -717,14 +717,14 @@ function ProfileSection({ user }) {
             {user.name.charAt(0)}
           </div>
           <div className="sd-profile-name">{form.name}</div>
-          <div className="sd-profile-role">🎓 Student</div>
+          <div className="sd-profile-role"> Student</div>
           <div className="sd-profile-stats-mini">
             <div><span>{myQuestions.length}</span><span>Questions</span></div>
             <div><span>{mockBids.length}</span><span>Bids</span></div>
             <div><span>{mockDownloads.length}</span><span>Files</span></div>
           </div>
           <button className="btn btn-secondary btn-sm" style={{ marginTop: 16 }} onClick={() => setEditing(!editing)}>
-            {editing ? "✅ Save Changes" : "✏️ Edit Profile"}
+            {editing ? " Save Changes" : " Edit Profile"}
           </button>
         </div>
 
@@ -783,17 +783,17 @@ function ProfileSection({ user }) {
           <div className="sd-widget" style={{ padding: "24px", marginTop: 20, marginBottom: 0 }}>
             <h2 style={{ marginBottom: 16, fontSize: 18 }}>Account & Security</h2>
             <div className="sd-security-item">
-              <span>🔑 Password</span>
+              <span> Password</span>
               <button className="btn btn-secondary btn-sm">Change Password</button>
             </div>
             <div className="sd-security-item">
-              <span>🔔 Email Notifications</span>
+              <span> Email Notifications</span>
               <div className={`sd-toggle sd-toggle-on`} style={{ cursor: "pointer" }}>
                 <div className="sd-toggle-thumb"></div>
               </div>
             </div>
             <div className="sd-security-item">
-              <span>🗑️ Delete Account</span>
+              <span> Delete Account</span>
               <button className="btn btn-sm" style={{ background: "#FFEBEE", color: "#F44336", border: "none" }}>Delete</button>
             </div>
           </div>
@@ -803,7 +803,7 @@ function ProfileSection({ user }) {
   );
 }
 
-// ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
+//  MAIN COMPONENT 
 export default function StudentDashboard({ user }) {
   const [active, setActive] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -835,7 +835,7 @@ export default function StudentDashboard({ user }) {
           </div>
           <div>
             <div className="sd-sidebar-name">{user.name}</div>
-            <div className="sd-sidebar-role">🎓 Student</div>
+            <div className="sd-sidebar-role"> Student</div>
           </div>
         </div>
         <nav className="sd-nav">
@@ -860,7 +860,7 @@ export default function StudentDashboard({ user }) {
       <main className="sd-main">
         {/* Mobile header */}
         <div className="sd-mobile-bar">
-          <button className="sd-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}>☰</button>
+          <button className="sd-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}></button>
           <span className="sd-mobile-title">
             {NAV_ITEMS.find((i) => i.id === active)?.icon}{" "}
             {NAV_ITEMS.find((i) => i.id === active)?.label}

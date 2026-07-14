@@ -49,13 +49,13 @@ export default function FAQPage() {
   return (
     <div className="animate-up">
       <div className="faq-container">
-        {/* ── HERO ── */}
+        {/*  HERO  */}
         <div className="faq-hero">
           <h1>Frequently Asked <span>Questions</span></h1>
           <p>Have questions about JONNE? Find answers here or reach out to our team.</p>
         </div>
 
-        {/* ── CATEGORY BUTTONS ── */}
+        {/*  CATEGORY BUTTONS  */}
         <div className="faq-categories">
           {["all", "general", "students", "tutors"].map((cat) => (
             <button
@@ -71,7 +71,7 @@ export default function FAQPage() {
           ))}
         </div>
 
-        {/* ── ACCORDION LIST ── */}
+        {/*  ACCORDION LIST  */}
         <div className="faq-list">
           {filteredFAQ.length > 0 ? (
             filteredFAQ.map((faq, idx) => {
@@ -80,7 +80,7 @@ export default function FAQPage() {
                 <div key={idx} className={`faq-item ${isOpen ? "open" : ""}`}>
                   <button className="faq-trigger" onClick={() => toggleFAQ(idx)}>
                     <span>{faq.question}</span>
-                    <span className="faq-arrow">▼</span>
+                    <span className="faq-arrow"></span>
                   </button>
                   <div
                     className="faq-content"
@@ -102,7 +102,7 @@ export default function FAQPage() {
           )}
         </div>
 
-        {/* ── FOOTER CTA ── */}
+        {/*  FOOTER CTA  */}
         <div
           style={{
             marginTop: "60px",
@@ -119,7 +119,7 @@ export default function FAQPage() {
             We'd love to help you clear up any doubts. Feel free to contact our support team.
           </p>
           <Link to="/contact" className="btn btn-secondary">
-            ✉️ Get in Touch
+             Get in Touch
           </Link>
         </div>
       </div>

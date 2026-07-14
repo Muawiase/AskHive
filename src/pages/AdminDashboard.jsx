@@ -10,17 +10,17 @@ import {
 
 // Expanded initial users list for the management screen
 const initialUsers = [
-  { id: 1, name: "Amara K.", email: "amara@example.com", role: "student", status: "Active", joinedAt: "2026-01-15", avatar: "🧑🏽‍🎓", color: "#6C63FF" },
-  { id: 2, name: "Marcus Chen", email: "marcus@example.com", role: "tutor", status: "Active", joinedAt: "2025-09-10", avatar: "👨🏻‍💻", color: "#FF6584" },
-  { id: 3, name: "Dr. Fatima Al-Hassan", email: "fatima@example.com", role: "tutor", status: "Active", joinedAt: "2025-05-12", avatar: "👩🏽‍🏫", color: "#6C63FF" },
-  { id: 4, name: "Isabelle Moreau", email: "isabelle@example.com", role: "tutor", status: "Active", joinedAt: "2025-11-20", avatar: "👩🏼‍🎓", color: "#43C59E" },
-  { id: 5, name: "Ayaan Patel", email: "ayaan@example.com", role: "tutor", status: "Active", joinedAt: "2026-02-02", avatar: "🧑🏾‍🔬", color: "#FF9F43" },
-  { id: 6, name: "Zara Williams", email: "zara@example.com", role: "tutor", status: "Active", joinedAt: "2026-03-10", avatar: "👩🏿‍📚", color: "#A29BFE" },
-  { id: 7, name: "Daniel O.", email: "daniel@example.com", role: "student", status: "Active", joinedAt: "2026-01-18", avatar: "🧑🏻‍💻", color: "#FF6B6B" },
-  { id: 8, name: "Sophie L.", email: "sophie@example.com", role: "student", status: "Active", joinedAt: "2026-02-25", avatar: "👩🏻‍💼", color: "#10AC84" },
-  { id: 9, name: "Keita N.", email: "keita@example.com", role: "student", status: "Active", joinedAt: "2026-03-01", avatar: "🧑🏼‍🎨", color: "#FF9F43" },
-  { id: 10, name: "Rachel T.", email: "rachel@example.com", role: "student", status: "Banned", joinedAt: "2026-01-05", avatar: "👩🏽‍⚕️", color: "#2E86DE" },
-  { id: 11, name: "Alex Mercer", email: "admin@jonne.com", role: "admin", status: "Active", joinedAt: "2024-01-01", avatar: "⚙️", color: "#2C3E50" }
+  { id: 1, name: "Amara K.", email: "amara@example.com", role: "student", status: "Active", joinedAt: "2026-01-15", avatar: "", color: "#6C63FF" },
+  { id: 2, name: "Marcus Chen", email: "marcus@example.com", role: "tutor", status: "Active", joinedAt: "2025-09-10", avatar: "", color: "#FF6584" },
+  { id: 3, name: "Dr. Fatima Al-Hassan", email: "fatima@example.com", role: "tutor", status: "Active", joinedAt: "2025-05-12", avatar: "", color: "#6C63FF" },
+  { id: 4, name: "Isabelle Moreau", email: "isabelle@example.com", role: "tutor", status: "Active", joinedAt: "2025-11-20", avatar: "", color: "#43C59E" },
+  { id: 5, name: "Ayaan Patel", email: "ayaan@example.com", role: "tutor", status: "Active", joinedAt: "2026-02-02", avatar: "", color: "#FF9F43" },
+  { id: 6, name: "Zara Williams", email: "zara@example.com", role: "tutor", status: "Active", joinedAt: "2026-03-10", avatar: "", color: "#A29BFE" },
+  { id: 7, name: "Daniel O.", email: "daniel@example.com", role: "student", status: "Active", joinedAt: "2026-01-18", avatar: "", color: "#FF6B6B" },
+  { id: 8, name: "Sophie L.", email: "sophie@example.com", role: "student", status: "Active", joinedAt: "2026-02-25", avatar: "", color: "#10AC84" },
+  { id: 9, name: "Keita N.", email: "keita@example.com", role: "student", status: "Active", joinedAt: "2026-03-01", avatar: "", color: "#FF9F43" },
+  { id: 10, name: "Rachel T.", email: "rachel@example.com", role: "student", status: "Banned", joinedAt: "2026-01-05", avatar: "", color: "#2E86DE" },
+  { id: 11, name: "Alex Mercer", email: "admin@jonne.com", role: "admin", status: "Active", joinedAt: "2024-01-01", avatar: "", color: "#2C3E50" }
 ];
 
 export default function AdminDashboard({ user }) {
@@ -67,7 +67,7 @@ export default function AdminDashboard({ user }) {
   const [newUser, setNewUser] = useState({ name: "", email: "", role: "student" });
 
   // Add Category State
-  const [newCategory, setNewCategory] = useState({ name: "", icon: "📚" });
+  const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
 
   // Manage Users handlers
   const handleToggleBan = (userId) => {
@@ -98,7 +98,7 @@ export default function AdminDashboard({ user }) {
       role: newUser.role,
       status: "Active",
       joinedAt: new Date().toISOString().split("T")[0],
-      avatar: newUser.role === "tutor" ? "👨‍🏫" : newUser.role === "admin" ? "⚙️" : "🎓",
+      avatar: newUser.role === "tutor" ? "" : newUser.role === "admin" ? "" : "",
       color: newUser.role === "tutor" ? "#4CAF50" : newUser.role === "admin" ? "#2C3E50" : "#6C63FF"
     };
     setUsers([userObj, ...users]);
@@ -126,10 +126,10 @@ export default function AdminDashboard({ user }) {
     if (!newCategory.name.trim()) return;
     const cat = {
       label: newCategory.name.trim(),
-      icon: newCategory.icon || "💡"
+      icon: newCategory.icon || ""
     };
     setCategories([...categories, cat]);
-    setNewCategory({ name: "", icon: "📚" });
+    setNewCategory({ name: "", icon: "" });
   };
 
   const handleDeleteCategory = (label) => {
@@ -208,14 +208,14 @@ export default function AdminDashboard({ user }) {
   const [questionStatusFilter, setQuestionStatusFilter] = useState("all");
 
   const NAV_ITEMS = [
-    { id: "dashboard", label: "Dashboard", icon: "📊" },
-    { id: "users", label: "Manage Users", icon: "👥", badge: users.filter(u => u.status === "Banned").length },
-    { id: "questions", label: "Questions", icon: "❓" },
-    { id: "categories", label: "Categories", icon: "🏷️" },
-    { id: "payments", label: "Payments", icon: "💳" },
-    { id: "reviews", label: "Reviews", icon: "⭐" },
-    { id: "reports", label: "Reports", icon: "🚨", badge: reports.filter(r => r.status === "pending").length },
-    { id: "settings", label: "Settings", icon: "⚙️" }
+    { id: "dashboard", label: "Dashboard", icon: "" },
+    { id: "users", label: "Manage Users", icon: "", badge: users.filter(u => u.status === "Banned").length },
+    { id: "questions", label: "Questions", icon: "" },
+    { id: "categories", label: "Categories", icon: "" },
+    { id: "payments", label: "Payments", icon: "" },
+    { id: "reviews", label: "Reviews", icon: "" },
+    { id: "reports", label: "Reports", icon: "", badge: reports.filter(r => r.status === "pending").length },
+    { id: "settings", label: "Settings", icon: "" }
   ];
 
   return (
@@ -434,11 +434,11 @@ export default function AdminDashboard({ user }) {
       <aside className={`sd-sidebar ${sidebarOpen ? "sd-sidebar-open" : ""}`}>
         <div className="sd-sidebar-user">
           <div className="sd-sidebar-avatar" style={{ background: "linear-gradient(135deg,#34495e,#1abc9c)" }}>
-            ⚙️
+            
           </div>
           <div>
             <div className="sd-sidebar-name">{user?.name || "Admin Mercer"}</div>
-            <div className="sd-sidebar-role">👑 System Administrator</div>
+            <div className="sd-sidebar-role"> System Administrator</div>
           </div>
         </div>
         <nav className="sd-nav">
@@ -463,7 +463,7 @@ export default function AdminDashboard({ user }) {
       <main className="sd-main">
         {/* Mobile Header Bar */}
         <div className="sd-mobile-bar" style={{ background: "#2c3e50" }}>
-          <button className="sd-hamburger" style={{ color: "white" }} onClick={() => setSidebarOpen(!sidebarOpen)}>☰</button>
+          <button className="sd-hamburger" style={{ color: "white" }} onClick={() => setSidebarOpen(!sidebarOpen)}></button>
           <span className="sd-mobile-title" style={{ color: "white" }}>
             {NAV_ITEMS.find((i) => i.id === active)?.icon}{" "}
             {NAV_ITEMS.find((i) => i.id === active)?.label}
@@ -476,7 +476,7 @@ export default function AdminDashboard({ user }) {
             <div className="sd-section">
               <div className="sd-welcome-banner">
                 <div className="sd-welcome-text">
-                  <h1>👋 System Control Dashboard</h1>
+                  <h1> System Control Dashboard</h1>
                   <p>Welcome back, Administrator. Platform operations, security, and statistics are functioning correctly.</p>
                 </div>
               </div>
@@ -484,12 +484,12 @@ export default function AdminDashboard({ user }) {
               {/* Stats Grid */}
               <div className="sd-stats-grid">
                 {[
-                  { icon: "👥", num: users.length, label: "Total Users", color: "#2980b9", sub: `${users.filter(u => u.role === "tutor").length} Tutors, ${users.filter(u => u.role === "student").length} Students` },
-                  { icon: "❓", num: questions.length, label: "Total Questions", color: "#27ae60", sub: `${questions.filter(q => q.status === "open").length} Open questions` },
-                  { icon: "🏷️", num: categories.length, label: "Categories", color: "#8e44ad", sub: "Active academic topics" },
-                  { icon: "💵", num: `$${transactions.reduce((acc, t) => t.status === "completed" ? acc + t.amount : acc, 0)}`, label: "Gross Volume", color: "#f39c12", sub: "Successful transactions" },
-                  { icon: "🚨", num: reports.filter(r => r.status === "pending").length, label: "Pending Reports", color: "#c0392b", sub: "Requires admin review" },
-                  { icon: "⭐", num: reviews.length, label: "Moderated Reviews", color: "#1abc9c", sub: "Tutor feedback items" }
+                  { icon: "", num: users.length, label: "Total Users", color: "#2980b9", sub: `${users.filter(u => u.role === "tutor").length} Tutors, ${users.filter(u => u.role === "student").length} Students` },
+                  { icon: "", num: questions.length, label: "Total Questions", color: "#27ae60", sub: `${questions.filter(q => q.status === "open").length} Open questions` },
+                  { icon: "", num: categories.length, label: "Categories", color: "#8e44ad", sub: "Active academic topics" },
+                  { icon: "", num: `$${transactions.reduce((acc, t) => t.status === "completed" ? acc + t.amount : acc, 0)}`, label: "Gross Volume", color: "#f39c12", sub: "Successful transactions" },
+                  { icon: "", num: reports.filter(r => r.status === "pending").length, label: "Pending Reports", color: "#c0392b", sub: "Requires admin review" },
+                  { icon: "", num: reviews.length, label: "Moderated Reviews", color: "#1abc9c", sub: "Tutor feedback items" }
                 ].map((s, idx) => (
                   <div className="sd-stat-card" key={idx} style={{ "--accent-color": s.color }}>
                     <div className="sd-stat-icon" style={{ background: s.color + "18", color: s.color }}>{s.icon}</div>
@@ -505,7 +505,7 @@ export default function AdminDashboard({ user }) {
                 {/* Registrations Chart */}
                 <div className="sd-widget" style={{ padding: 20 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 700 }}>📈 User Signups Trend</h3>
+                    <h3 style={{ fontSize: 14, fontWeight: 700 }}> User Signups Trend</h3>
                     <span style={{ fontSize: 11, background: "var(--primary-light)", padding: "2px 8px", borderRadius: 4, fontWeight: 600 }}>2026 Target</span>
                   </div>
                   <div className="chart-bar-container">
@@ -529,13 +529,13 @@ export default function AdminDashboard({ user }) {
 
                 {/* Popular Categories */}
                 <div className="sd-widget" style={{ padding: 20 }}>
-                  <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}>🎯 Popular subjects</h3>
+                  <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}> Popular subjects</h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     {[
-                      { name: "Mathematics", icon: "📐", pct: 85, color: "#3498db", count: 32 },
-                      { name: "Coding", icon: "💻", pct: 75, color: "#9b59b6", count: 28 },
-                      { name: "Physics", icon: "⚡", pct: 60, color: "#f1c40f", count: 21 },
-                      { name: "Languages", icon: "🗣️", pct: 45, color: "#e67e22", count: 15 }
+                      { name: "Mathematics", icon: "", pct: 85, color: "#3498db", count: 32 },
+                      { name: "Coding", icon: "", pct: 75, color: "#9b59b6", count: 28 },
+                      { name: "Physics", icon: "", pct: 60, color: "#f1c40f", count: 21 },
+                      { name: "Languages", icon: "", pct: 45, color: "#e67e22", count: 15 }
                     ].map((subj) => (
                       <div key={subj.name}>
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
@@ -554,12 +554,12 @@ export default function AdminDashboard({ user }) {
               {/* System Overview Widgets */}
               <div className="sd-widget">
                 <div className="sd-widget-header">
-                  <h2>⚙️ System Diagnostics & Alerts</h2>
-                  <span style={{ fontSize: 12, color: "#27ae60", fontWeight: 700 }}>● All Services Operational</span>
+                  <h2> System Diagnostics & Alerts</h2>
+                  <span style={{ fontSize: 12, color: "#27ae60", fontWeight: 700 }}> All Services Operational</span>
                 </div>
                 <div className="sd-list">
                   <div className="sd-list-item">
-                    <span style={{ fontSize: 20 }}>🚀</span>
+                    <span style={{ fontSize: 20 }}></span>
                     <div className="sd-list-item-body">
                       <div className="sd-list-title">Vite Dev Server Status</div>
                       <div className="sd-list-meta">Running on port 5173 - Hot Module Replacement enabled</div>
@@ -567,7 +567,7 @@ export default function AdminDashboard({ user }) {
                     <span className="sd-time-chip" style={{ background: "#e8f5e9", color: "#2e7d32", padding: "4px 8px", borderRadius: 4, fontWeight: 700 }}>ONLINE</span>
                   </div>
                   <div className="sd-list-item">
-                    <span style={{ fontSize: 20 }}>📦</span>
+                    <span style={{ fontSize: 20 }}></span>
                     <div className="sd-list-item-body">
                       <div className="sd-list-title">Database Storage Mode</div>
                       <div className="sd-list-meta">In-Memory Mock State (changes persist during session)</div>
@@ -583,7 +583,7 @@ export default function AdminDashboard({ user }) {
           {active === "users" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>👥 User Account Management</h1>
+                <h1> User Account Management</h1>
                 <p>Monitor, ban, modify credentials and toggle administrative status of students and tutors.</p>
               </div>
 
@@ -593,7 +593,7 @@ export default function AdminDashboard({ user }) {
                   <input
                     type="text"
                     className="admin-input"
-                    placeholder="🔍 Search name or email..."
+                    placeholder=" Search name or email..."
                     value={userSearch}
                     onChange={(e) => setUserSearch(e.target.value)}
                     style={{ flex: 1 }}
@@ -611,7 +611,7 @@ export default function AdminDashboard({ user }) {
                   </select>
                 </div>
                 <button className="btn btn-primary" onClick={() => setShowAddUser(true)}>
-                  ➕ Add User
+                   Add User
                 </button>
               </div>
 
@@ -659,7 +659,7 @@ export default function AdminDashboard({ user }) {
                                 className={`btn-table ${u.status === "Active" ? "btn-danger" : "btn-success-solid"}`}
                                 onClick={() => handleToggleBan(u.id)}
                               >
-                                {u.status === "Active" ? "🚫 Ban" : "✅ Unban"}
+                                {u.status === "Active" ? " Ban" : " Unban"}
                               </button>
                               <select
                                 className="btn-table btn-outline"
@@ -683,7 +683,7 @@ export default function AdminDashboard({ user }) {
               {showAddUser && (
                 <div className="admin-modal-overlay">
                   <div className="admin-modal">
-                    <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>➕ Create New Mock Account</h3>
+                    <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}> Create New Mock Account</h3>
                     <form onSubmit={handleAddUser}>
                       <div className="admin-input-group">
                         <label className="admin-label">Full Name</label>
@@ -734,7 +734,7 @@ export default function AdminDashboard({ user }) {
           {active === "questions" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>❓ Platform Question Feed Moderation</h1>
+                <h1> Platform Question Feed Moderation</h1>
                 <p>Review current requests, delete answers or text with inappropriate content, and view details.</p>
               </div>
 
@@ -743,7 +743,7 @@ export default function AdminDashboard({ user }) {
                 <input
                   type="text"
                   className="admin-input"
-                  placeholder="🔍 Search questions..."
+                  placeholder=" Search questions..."
                   value={questionSearch}
                   onChange={(e) => setQuestionSearch(e.target.value)}
                   style={{ flex: 1, minWidth: 250 }}
@@ -780,9 +780,9 @@ export default function AdminDashboard({ user }) {
                           </span>
                           <span className="sd-pill" style={{ background: "#eceff1", color: "#37474f" }}>{q.level}</span>
                           {q.isPaid ? (
-                            <span className="sd-pill" style={{ background: "#e3f2fd", color: "#1e88e5" }}>💸 Paid: ${q.pricePerHour}/hr</span>
+                            <span className="sd-pill" style={{ background: "#e3f2fd", color: "#1e88e5" }}> Paid: ${q.pricePerHour}/hr</span>
                           ) : (
-                            <span className="sd-pill" style={{ background: "#e8f5e9", color: "#2e7d32" }}>🎁 Free / Peer Help</span>
+                            <span className="sd-pill" style={{ background: "#e8f5e9", color: "#2e7d32" }}> Free / Peer Help</span>
                           )}
                           <span className={`status-badge status-${q.status.replace("-", "")}`} style={{ padding: "2px 6px" }}>{q.status}</span>
                         </div>
@@ -792,14 +792,14 @@ export default function AdminDashboard({ user }) {
                             onClick={() => handleFlagQuestion(q.id)}
                             style={{ margin: 0, borderColor: q.status === "flagged" ? "#c0392b" : undefined, color: q.status === "flagged" ? "#c0392b" : undefined }}
                           >
-                            ⚠️ {q.status === "flagged" ? "Unflag" : "Flag"}
+                             {q.status === "flagged" ? "Unflag" : "Flag"}
                           </button>
                           <button
                             className="btn-table btn-danger"
                             onClick={() => handleDeleteQuestion(q.id)}
                             style={{ margin: 0 }}
                           >
-                            🗑️ Delete
+                             Delete
                           </button>
                         </div>
                       </div>
@@ -809,9 +809,9 @@ export default function AdminDashboard({ user }) {
                       </div>
                       <div className="sd-question-footer" style={{ padding: "8px 0 0", marginTop: 0 }}>
                         <div className="sd-question-meta">
-                          <span>👤 Posted by <strong>{q.studentName}</strong></span>
-                          <span>💬 Bids: {q.responses}</span>
-                          <span>📅 Limit: {q.deadline}</span>
+                          <span> Posted by <strong>{q.studentName}</strong></span>
+                          <span> Bids: {q.responses}</span>
+                          <span> Limit: {q.deadline}</span>
                         </div>
                         <Link to={`/question/${q.id}`} style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>View Question Details →</Link>
                       </div>
@@ -825,13 +825,13 @@ export default function AdminDashboard({ user }) {
           {active === "categories" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>🏷️ Academic Categories (Subjects)</h1>
+                <h1> Academic Categories (Subjects)</h1>
                 <p>Add new subject tags or edit/delete existing topics in which questions can be categorized.</p>
               </div>
 
               {/* Add New Category form */}
               <div className="sd-widget" style={{ padding: 24, marginBottom: 24 }}>
-                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>➕ Create New Category Tag</h3>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}> Create New Category Tag</h3>
                 <form onSubmit={handleAddCategory} style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "flex-end" }}>
                   <div style={{ flex: 1, minWidth: 200 }}>
                     <label className="admin-label">Subject Label</label>
@@ -851,20 +851,20 @@ export default function AdminDashboard({ user }) {
                       value={newCategory.icon}
                       onChange={(e) => setNewCategory({ ...newCategory, icon: e.target.value })}
                     >
-                      <option value="📚">📚 Books</option>
-                      <option value="📐">📐 Triangle</option>
-                      <option value="💻">💻 Laptop</option>
-                      <option value="⚡">⚡ Bolt</option>
-                      <option value="🧬">🧬 DNA</option>
-                      <option value="📜">📜 Scroll</option>
-                      <option value="📊">📊 Chart</option>
-                      <option value="🗣️">🗣️ Speech</option>
-                      <option value="✍️">✍️ Pen</option>
-                      <option value="🎨">🎨 Art</option>
-                      <option value="🔬">🔬 Microscope</option>
-                      <option value="🌍">🌍 Earth</option>
-                      <option value="🎵">🎵 Music</option>
-                      <option value="💡">💡 Bulb</option>
+                      <option value=""> Books</option>
+                      <option value=""> Triangle</option>
+                      <option value=""> Laptop</option>
+                      <option value=""> Bolt</option>
+                      <option value=""> DNA</option>
+                      <option value=""> Scroll</option>
+                      <option value=""> Chart</option>
+                      <option value=""> Speech</option>
+                      <option value=""> Pen</option>
+                      <option value=""> Art</option>
+                      <option value=""> Microscope</option>
+                      <option value=""> Earth</option>
+                      <option value=""> Music</option>
+                      <option value=""> Bulb</option>
                     </select>
                   </div>
                   <button type="submit" className="btn btn-primary" style={{ height: 42, display: "flex", alignItems: "center" }}>
@@ -887,7 +887,7 @@ export default function AdminDashboard({ user }) {
                       style={{ padding: "4px 8px", margin: 0 }}
                       title="Delete category"
                     >
-                      🗑️
+                      
                     </button>
                   </div>
                 ))}
@@ -899,24 +899,24 @@ export default function AdminDashboard({ user }) {
           {active === "payments" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>💳 Platforms Financial Transaction Ledger</h1>
+                <h1> Platforms Financial Transaction Ledger</h1>
                 <p>Track student deposits, process manual payouts, verify commission cuts, and manage refunds.</p>
               </div>
 
               {/* Stats Summary cards */}
               <div className="sd-stats-grid">
                 <div className="sd-stat-card" style={{ "--accent-color": "#2ecc71" }}>
-                  <div className="sd-stat-icon" style={{ background: "#2ecc711a", color: "#2ecc71" }}>💰</div>
+                  <div className="sd-stat-icon" style={{ background: "#2ecc711a", color: "#2ecc71" }}></div>
                   <div className="sd-stat-num">$148.00</div>
                   <div className="sd-stat-label">Total Volume (Gross)</div>
                 </div>
                 <div className="sd-stat-card" style={{ "--accent-color": "#3498db" }}>
-                  <div className="sd-stat-icon" style={{ background: "#3498db1a", color: "#3498db" }}>⚙️</div>
+                  <div className="sd-stat-icon" style={{ background: "#3498db1a", color: "#3498db" }}></div>
                   <div className="sd-stat-num">${(148 * (parseFloat(settings.commissionFee) / 100)).toFixed(2)}</div>
                   <div className="sd-stat-label">Platform Fees ({settings.commissionFee}%)</div>
                 </div>
                 <div className="sd-stat-card" style={{ "--accent-color": "#e74c3c" }}>
-                  <div className="sd-stat-icon" style={{ background: "#e74c3c1a", color: "#e74c3c" }}>💸</div>
+                  <div className="sd-stat-icon" style={{ background: "#e74c3c1a", color: "#e74c3c" }}></div>
                   <div className="sd-stat-num">$15.00</div>
                   <div className="sd-stat-label">Refunds Processed</div>
                 </div>
@@ -925,7 +925,7 @@ export default function AdminDashboard({ user }) {
               {/* Transactions list */}
               <div className="sd-widget">
                 <div className="sd-widget-header">
-                  <h2>📜 Transaction History Ledger</h2>
+                  <h2> Transaction History Ledger</h2>
                 </div>
                 <div className="admin-table-container" style={{ margin: 0, border: "none" }}>
                   <table className="admin-table">
@@ -963,7 +963,7 @@ export default function AdminDashboard({ user }) {
                                 className="btn-table btn-danger"
                                 onClick={() => handleRefundTransaction(t.id)}
                               >
-                                💸 Refund
+                                 Refund
                               </button>
                             )}
                             {t.status === "pending" && (
@@ -971,7 +971,7 @@ export default function AdminDashboard({ user }) {
                                 className="btn-table btn-success-solid"
                                 onClick={() => handleApproveTransaction(t.id)}
                               >
-                                ✓ Approve Payout
+                                 Approve Payout
                               </button>
                             )}
                             {t.status === "refunded" && (
@@ -991,7 +991,7 @@ export default function AdminDashboard({ user }) {
           {active === "reviews" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>⭐ Tutor Review Moderation Feed</h1>
+                <h1> Tutor Review Moderation Feed</h1>
                 <p>Read all feedback ratings written by students. Moderate inappropriate statements or verify top reviews.</p>
               </div>
 
@@ -1001,13 +1001,13 @@ export default function AdminDashboard({ user }) {
                   <div className="sd-question-card" key={r.id} style={{ borderLeft: r.verified ? "4px solid #1abc9c" : undefined }}>
                     <div className="sd-question-card-top">
                       <div className="sd-question-badges">
-                        <span style={{ fontSize: 13, fontWeight: 700 }}>👨🏽‍🏫 Reviewed Tutor: {r.tutorName}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700 }}> Reviewed Tutor: {r.tutorName}</span>
                         <span className="sd-pill" style={{ background: "#fff8e1", color: "#f57f17", fontWeight: 700 }}>
-                          {"★".repeat(r.rating) + "☆".repeat(5 - r.rating)} ({r.rating}/5)
+                          {"".repeat(r.rating) + "".repeat(5 - r.rating)} ({r.rating}/5)
                         </span>
                         {r.verified && (
                           <span className="sd-pill" style={{ background: "#e8f5e9", color: "#2e7d32", fontSize: 11 }}>
-                            ✓ Verified Review
+                             Verified Review
                           </span>
                         )}
                       </div>
@@ -1024,7 +1024,7 @@ export default function AdminDashboard({ user }) {
                           onClick={() => handleDeleteReview(r.id)}
                           style={{ margin: 0 }}
                         >
-                          🗑️ Delete Review
+                           Delete Review
                         </button>
                       </div>
                     </div>
@@ -1044,14 +1044,14 @@ export default function AdminDashboard({ user }) {
           {active === "reports" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>🚨 System Flags & Abuse Reports</h1>
+                <h1> System Flags & Abuse Reports</h1>
                 <p>Investigate claims of harassment, spam, copyright issues, or violation of community standards.</p>
               </div>
 
               {/* Reports Table */}
               <div className="sd-widget">
                 <div className="sd-widget-header">
-                  <h2>⚠️ Flagged Platform Activity</h2>
+                  <h2> Flagged Platform Activity</h2>
                 </div>
                 <div className="admin-table-container" style={{ margin: 0, border: "none" }}>
                   <table className="admin-table">
@@ -1097,7 +1097,7 @@ export default function AdminDashboard({ user }) {
                                   className="btn-table btn-danger"
                                   onClick={() => handleResolveReport(rep.id, "delete")}
                                 >
-                                  🗑️ Delete Target
+                                   Delete Target
                                 </button>
                               </div>
                             ) : (
@@ -1117,13 +1117,13 @@ export default function AdminDashboard({ user }) {
           {active === "settings" && (
             <div className="sd-section">
               <div className="sd-page-header">
-                <h1>⚙️ Global Platform Settings</h1>
+                <h1> Global Platform Settings</h1>
                 <p>Modify basic portal configs, fee structure rates, toggle maintenance mode, and adjust safety metrics.</p>
               </div>
 
               {settingsSaved && (
                 <div style={{ background: "#e8f5e9", color: "#2e7d32", padding: "12px 18px", borderRadius: "var(--radius-md)", border: "1px solid #2e7d32", marginBottom: 20, fontWeight: 600 }}>
-                  ✓ System configuration settings saved successfully!
+                   System configuration settings saved successfully!
                 </div>
               )}
 
@@ -1182,7 +1182,7 @@ export default function AdminDashboard({ user }) {
                   <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
-                        <strong style={{ fontSize: 14 }}>🔧 Maintenance Mode</strong>
+                        <strong style={{ fontSize: 14 }}> Maintenance Mode</strong>
                         <p style={{ fontSize: 12, color: "var(--text-muted)" }}>If toggled, the application will display a placeholder warning page to guests.</p>
                       </div>
                       <div
@@ -1196,7 +1196,7 @@ export default function AdminDashboard({ user }) {
 
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
-                        <strong style={{ fontSize: 14 }}>👋 Open Registrations</strong>
+                        <strong style={{ fontSize: 14 }}> Open Registrations</strong>
                         <p style={{ fontSize: 12, color: "var(--text-muted)" }}>Allows new accounts to sign up for learner or helper memberships.</p>
                       </div>
                       <div

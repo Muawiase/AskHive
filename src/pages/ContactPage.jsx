@@ -106,7 +106,7 @@ export default function ContactPage() {
           <div className="card contact-form-card" style={{ background: "white", borderRadius: "var(--radius-lg)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
             {success ? (
               <div className="contact-success">
-                <div className="contact-success-icon">✓</div>
+                <div className="contact-success-icon"></div>
                 <h3>Message Sent!</h3>
                 <p style={{ marginBottom: "24px" }}>
                   Thank you, <strong>{name || "there"}</strong>. We have received your message regarding <strong>{topic}</strong> and will contact you at <strong>{email}</strong> within 24 hours.

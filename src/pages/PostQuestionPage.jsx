@@ -29,7 +29,7 @@ export default function PostQuestionPage({ user }) {
     return (
       <div className="page" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 72, marginBottom: 24 }}>🎉</div>
+          <div style={{ fontSize: 72, marginBottom: 24 }}></div>
           <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 12 }}>Question posted!</h2>
           <p style={{ color: "var(--text-secondary)", fontSize: 16, marginBottom: 8 }}>
             Tutors and helpers have been notified. You'll get responses soon!
@@ -44,7 +44,7 @@ export default function PostQuestionPage({ user }) {
     <div className="page">
       <div className="browse-hero">
         <div className="container">
-          <h1>✏️ Post a Question</h1>
+          <h1> Post a Question</h1>
           <p>Describe what you need help with — be as specific as possible for better responses.</p>
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function PostQuestionPage({ user }) {
               <form onSubmit={(e) => { e.preventDefault(); setPreview(true); }}>
                 <div className="card">
                   <div className="card-inner">
-                    <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 24 }}>📝 Question Details</h2>
+                    <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 24 }}> Question Details</h2>
 
                     <div className="form-group">
                       <label className="form-label">Question Title *</label>
@@ -125,7 +125,7 @@ export default function PostQuestionPage({ user }) {
                       >
                         {fileUploaded ? (
                           <>
-                            <div className="upload-area-icon">✅</div>
+                            <div className="upload-area-icon"></div>
                             <p style={{ color: "var(--success)", fontWeight: 600 }}>
                               homework_question.pdf attached
                             </p>
@@ -135,7 +135,7 @@ export default function PostQuestionPage({ user }) {
                           </>
                         ) : (
                           <>
-                            <div className="upload-area-icon">📎</div>
+                            <div className="upload-area-icon"></div>
                             <p style={{ fontWeight: 600 }}>Click to attach files</p>
                             <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>
                               PDF, images, Word docs up to 10MB
@@ -160,21 +160,21 @@ export default function PostQuestionPage({ user }) {
 
                 <div className="card" style={{ marginTop: 20 }}>
                   <div className="card-inner">
-                    <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>💰 How would you like help?</h2>
+                    <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}> How would you like help?</h2>
                     <div className="payment-toggle">
                       <button
                         type="button"
                         className={`payment-toggle-btn ${!form.isPaid ? "active-free" : ""}`}
                         onClick={() => set("isPaid", false)}
                       >
-                        🤝 Free Help
+                         Free Help
                       </button>
                       <button
                         type="button"
                         className={`payment-toggle-btn ${form.isPaid ? "active-paid" : ""}`}
                         onClick={() => set("isPaid", true)}
                       >
-                        💰 I'll Pay per Hour
+                         I'll Pay per Hour
                       </button>
                     </div>
 
@@ -192,7 +192,7 @@ export default function PostQuestionPage({ user }) {
                           required={form.isPaid}
                         />
                         <p className="form-hint">
-                          💡 Most high school questions get helpers at $10–$18/hr. University: $15–$30/hr.
+                           Most high school questions get helpers at $10–$18/hr. University: $15–$30/hr.
                         </p>
                       </div>
                     ) : (
@@ -207,7 +207,7 @@ export default function PostQuestionPage({ user }) {
                           fontWeight: 500,
                         }}
                       >
-                        ✅ You're asking for free help. Generous peer students and tutors who love giving back will be notified!
+                         You're asking for free help. Generous peer students and tutors who love giving back will be notified!
                       </div>
                     )}
                   </div>
@@ -215,12 +215,12 @@ export default function PostQuestionPage({ user }) {
 
                 <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
                   <button type="submit" className="btn btn-secondary" style={{ flex: 1, justifyContent: "center" }}>
-                    👁️ Preview Question
+                     Preview Question
                   </button>
                 </div>
               </form>
             ) : (
-              /* ── PREVIEW ── */
+              /*  PREVIEW  */
               <div>
                 <div className="card" style={{ marginBottom: 20 }}>
                   <div className="card-inner">
@@ -235,14 +235,14 @@ export default function PostQuestionPage({ user }) {
                         fontSize: 15,
                       }}
                     >
-                      👁️ Preview — This is how your question will look to helpers
+                       Preview — This is how your question will look to helpers
                     </div>
                     <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
                       {form.subject && <span className="badge badge-subject">{form.subject}</span>}
                       {form.isPaid ? (
-                        <span className="badge badge-paid">💰 ${form.pricePerHour}/hr</span>
+                        <span className="badge badge-paid"> ${form.pricePerHour}/hr</span>
                       ) : (
-                        <span className="badge badge-free">✅ FREE</span>
+                        <span className="badge badge-free"> FREE</span>
                       )}
                       {form.level && <span className="badge badge-level">{form.level}</span>}
                     </div>
@@ -254,12 +254,12 @@ export default function PostQuestionPage({ user }) {
                     </p>
                     {form.deadline && (
                       <div style={{ marginTop: 16, fontSize: 13, color: "var(--text-muted)" }}>
-                        📅 Deadline: {new Date(form.deadline).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}
+                         Deadline: {new Date(form.deadline).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}
                       </div>
                     )}
                     {fileUploaded && (
                       <div style={{ marginTop: 10, fontSize: 13, color: "var(--text-muted)" }}>
-                        📎 homework_question.pdf attached
+                         homework_question.pdf attached
                       </div>
                     )}
                   </div>
@@ -278,17 +278,17 @@ export default function PostQuestionPage({ user }) {
                     style={{ flex: 1, justifyContent: "center" }}
                     onClick={handleSubmit}
                   >
-                    🚀 Post Question
+                     Post Question
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* ── SIDEBAR TIPS ── */}
+          {/*  SIDEBAR TIPS  */}
           <div style={{ position: "sticky", top: 90 }}>
             <div className="card sidebar-card">
-              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>💡 Tips for great responses</h3>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}> Tips for great responses</h3>
               {[
                 ["Be specific", "Instead of 'I don't understand physics', say 'I'm confused about Newton's 3rd law in the context of rockets.'"],
                 ["Share what you've tried", "Even if it's wrong — helpers can spot where you went off track."],
@@ -296,14 +296,14 @@ export default function PostQuestionPage({ user }) {
                 ["Add files", "Photos of your textbook, homework sheet, or your working really help!"],
               ].map(([title, tip]) => (
                 <div key={title} style={{ marginBottom: 16 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>✓ {title}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}> {title}</div>
                   <div style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>{tip}</div>
                 </div>
               ))}
             </div>
 
             <div className="card sidebar-card" style={{ marginTop: 20, background: "var(--free-bg)", borderColor: "var(--free-color)" }}>
-              <div style={{ fontSize: 28, marginBottom: 12 }}>🤝</div>
+              <div style={{ fontSize: 28, marginBottom: 12 }}></div>
               <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--free-color)", marginBottom: 8 }}>
                 Free help available!
               </h3>

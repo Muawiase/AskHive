@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { mockQuestions, mockTutors, subjects } from "../mockData";
 
-// ─── INITIAL SEED DATA ───
+//  INITIAL SEED DATA 
 const initialBids = [
   {
     id: 1,
@@ -45,7 +45,7 @@ const initialNotifications = [
     body: "Rachel T. accepted your bid on 'Supply and Demand Elasticity'.",
     time: "2 hours ago",
     read: false,
-    icon: "✅",
+    icon: "",
     color: "#4CAF50",
   },
   {
@@ -54,7 +54,7 @@ const initialNotifications = [
     body: "A new question in Coding: 'Flask deployment API issues' matches your subjects.",
     time: "5 hours ago",
     read: false,
-    icon: "💻",
+    icon: "",
     color: "#2196F3",
   },
   {
@@ -63,7 +63,7 @@ const initialNotifications = [
     body: "Your payout of $150 to PayPal has been successfully completed.",
     time: "4 days ago",
     read: true,
-    icon: "💳",
+    icon: "",
     color: "#FF9800",
   },
 ];
@@ -75,19 +75,19 @@ const initialLedger = [
   { id: "PAY-904", student: "Amara K.", subject: "Mathematics", date: "2026-07-05", amount: 160, status: "Completed" },
 ];
 
-// ─── NAV ITEMS FOR SIDEBAR ───
+//  NAV ITEMS FOR SIDEBAR 
 const getNavItems = (pendingBidsCount, unreadNotifsCount) => [
-  { id: "dashboard", label: "Dashboard", icon: "🏠" },
-  { id: "browse", label: "Browse Questions", icon: "🔍" },
-  { id: "bids", label: "Submit Bids", icon: "💬", badge: pendingBidsCount },
-  { id: "answers", label: "My Answers", icon: "✍️" },
-  { id: "earnings", label: "Earnings", icon: "💰" },
-  { id: "withdrawals", label: "Withdrawals", icon: "💳" },
-  { id: "notifications", label: "Notifications", icon: "🔔", badge: unreadNotifsCount },
-  { id: "profile", label: "Profile", icon: "👤" },
+  { id: "dashboard", label: "Dashboard", icon: "" },
+  { id: "browse", label: "Browse Questions", icon: "" },
+  { id: "bids", label: "Submit Bids", icon: "", badge: pendingBidsCount },
+  { id: "answers", label: "My Answers", icon: "" },
+  { id: "earnings", label: "Earnings", icon: "" },
+  { id: "withdrawals", label: "Withdrawals", icon: "" },
+  { id: "notifications", label: "Notifications", icon: "", badge: unreadNotifsCount },
+  { id: "profile", label: "Profile", icon: "" },
 ];
 
-// ─── SUB-COMPONENTS ───
+//  SUB-COMPONENTS 
 
 // 1. DASHBOARD HOME
 function DashboardHome({ user, bids, setBids, notifications, setNotifications, setActive, completedCount }) {
@@ -100,23 +100,23 @@ function DashboardHome({ user, bids, setBids, notifications, setNotifications, s
       {/* Welcome banner */}
       <div className="sd-welcome-banner">
         <div className="sd-welcome-text">
-          <h1>👋 Welcome, {user.name.split(" ")[0]}!</h1>
+          <h1> Welcome, {user.name.split(" ")[0]}!</h1>
           <p>Manage your sessions, bids, earnings, and check active questions on your student portal.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setActive("browse")}>
-          🔍 Browse Questions
+           Browse Questions
         </button>
       </div>
 
       {/* Stats Cards */}
       <div className="sd-stats-grid">
         {[
-          { icon: "⚡", num: activeSessionsCount, label: "Active Answers", color: "#FF9800", onClick: () => setActive("answers") },
-          { icon: "✅", num: completedCount, label: "Solved Questions", color: "#4CAF50", onClick: () => setActive("answers") },
-          { icon: "★", num: "4.8", label: "Avg Rating", color: "#2196F3", onClick: () => setActive("profile") },
-          { icon: "💬", num: pendingBidsCount, label: "Pending Bids", color: "#E91E63", onClick: () => setActive("bids") },
-          { icon: "💰", num: "$320", label: "Available Cash", color: "#9C27B0", onClick: () => setActive("earnings") },
-          { icon: "🔔", num: unreadCount, label: "Unread Alerts", color: "#FF5722", onClick: () => setActive("notifications") },
+          { icon: "", num: activeSessionsCount, label: "Active Answers", color: "#FF9800", onClick: () => setActive("answers") },
+          { icon: "", num: completedCount, label: "Solved Questions", color: "#4CAF50", onClick: () => setActive("answers") },
+          { icon: "", num: "4.8", label: "Avg Rating", color: "#2196F3", onClick: () => setActive("profile") },
+          { icon: "", num: pendingBidsCount, label: "Pending Bids", color: "#E91E63", onClick: () => setActive("bids") },
+          { icon: "", num: "$320", label: "Available Cash", color: "#9C27B0", onClick: () => setActive("earnings") },
+          { icon: "", num: unreadCount, label: "Unread Alerts", color: "#FF5722", onClick: () => setActive("notifications") },
         ].map((s) => (
           <div className="sd-stat-card" key={s.label} onClick={s.onClick} style={{ "--accent-color": s.color, cursor: "pointer" }}>
             <div className="sd-stat-icon" style={{ background: s.color + "18", color: s.color }}>{s.icon}</div>
@@ -129,7 +129,7 @@ function DashboardHome({ user, bids, setBids, notifications, setNotifications, s
       {/* Active sessions list */}
       <div className="sd-widget" style={{ marginTop: 24 }}>
         <div className="sd-widget-header">
-          <h2>✍️ Active Answering Sessions</h2>
+          <h2> Active Answering Sessions</h2>
           <button className="sd-link-btn" onClick={() => setActive("answers")}>View all answers →</button>
         </div>
         <div className="sd-list">
@@ -157,7 +157,7 @@ function DashboardHome({ user, bids, setBids, notifications, setNotifications, s
       {/* Recent Alerts */}
       <div className="sd-widget" style={{ marginTop: 24 }}>
         <div className="sd-widget-header">
-          <h2>🔔 Recent Notifications</h2>
+          <h2> Recent Notifications</h2>
           <button className="sd-link-btn" onClick={() => setActive("notifications")}>See all →</button>
         </div>
         <div className="sd-list">
@@ -232,7 +232,7 @@ function BrowseQuestionsSection({ bids, onAddBid, tutorSubjects }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>🔍 Browse Student Questions</h1>
+        <h1> Browse Student Questions</h1>
         <p>Find students requiring help. Bid on paid sessions or offer free volunteering to boost your rating.</p>
       </div>
 
@@ -281,7 +281,7 @@ function BrowseQuestionsSection({ bids, onAddBid, tutorSubjects }) {
       {biddingOnQuestion && (
         <div className="sd-widget" style={{ border: "2px solid var(--primary)", marginBottom: 24, padding: 24 }}>
           <h3 style={{ fontSize: 16, marginBottom: 12 }}>
-            ⚡ Place Bid on: <span style={{ color: "var(--primary)" }}>{biddingOnQuestion.title}</span>
+             Place Bid on: <span style={{ color: "var(--primary)" }}>{biddingOnQuestion.title}</span>
           </h3>
           <form onSubmit={handleSubmitBidForm} className="sd-form">
             {biddingOnQuestion.isPaid ? (
@@ -299,7 +299,7 @@ function BrowseQuestionsSection({ bids, onAddBid, tutorSubjects }) {
               </div>
             ) : (
               <div style={{ color: "var(--success)", fontWeight: 600, fontSize: 13, marginBottom: 16 }}>
-                🤝 This is a FREE question. You are volunteering your help!
+                 This is a FREE question. You are volunteering your help!
               </div>
             )}
             <div className="sd-form-group" style={{ marginBottom: 16 }}>
@@ -329,7 +329,7 @@ function BrowseQuestionsSection({ bids, onAddBid, tutorSubjects }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)", background: "white", borderRadius: "var(--radius-md)" }}>
-            🔍 No open questions matching filters.
+             No open questions matching filters.
           </div>
         ) : (
           filtered.map((q) => {
@@ -372,7 +372,7 @@ function BrowseQuestionsSection({ bids, onAddBid, tutorSubjects }) {
                     <div>
                       {isAlreadyBid ? (
                         <button className="btn btn-secondary btn-sm" disabled style={{ opacity: 0.6 }}>
-                          ✓ Bid Submitted
+                           Bid Submitted
                         </button>
                       ) : (
                         <button
@@ -417,11 +417,11 @@ function SubmitBidsSection({ bids, onCancelBid, onEditBid }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>💬 Submit Bids</h1>
+        <h1> Submit Bids</h1>
         <p>Manage and update bids you have submitted on student questions.</p>
       </div>
 
-      <h2 className="sd-subheading">⏳ Active Submitted Bids ({pending.length})</h2>
+      <h2 className="sd-subheading"> Active Submitted Bids ({pending.length})</h2>
       <div className="sd-bids-grid">
         {pending.length === 0 ? (
           <div style={{ gridColumn: "1/-1", padding: 24, textAlign: "center", color: "var(--text-muted)", background: "white", borderRadius: "var(--radius-md)" }}>
@@ -486,10 +486,10 @@ function SubmitBidsSection({ bids, onCancelBid, onEditBid }) {
                 {!isEditing && (
                   <div className="sd-bid-actions" style={{ marginTop: "auto" }}>
                     <button className="btn btn-primary btn-sm" onClick={() => startEdit(bid)}>
-                      ✏️ Edit Bid
+                       Edit Bid
                     </button>
                     <button className="btn btn-secondary btn-sm" onClick={() => onCancelBid(bid.id)}>
-                      ❌ Withdraw
+                       Withdraw
                     </button>
                   </div>
                 )}
@@ -501,7 +501,7 @@ function SubmitBidsSection({ bids, onCancelBid, onEditBid }) {
 
       {history.length > 0 && (
         <>
-          <h2 className="sd-subheading" style={{ marginTop: 36 }}>📋 Bid History ({history.length})</h2>
+          <h2 className="sd-subheading" style={{ marginTop: 36 }}> Bid History ({history.length})</h2>
           <div className="sd-bids-grid">
             {history.map((bid) => (
               <div className={`sd-bid-card ${bid.status === "accepted" ? "sd-bid-accepted" : ""}`} key={bid.id} style={{ opacity: 0.85 }}>
@@ -523,7 +523,7 @@ function SubmitBidsSection({ bids, onCancelBid, onEditBid }) {
                 <p className="sd-bid-message" style={{ margin: "12px 0", fontStyle: "italic" }}>"{bid.message}"</p>
                 {bid.status === "accepted" && (
                   <Link to={`/question/${bid.questionId}`} className="btn btn-primary btn-sm" style={{ width: "fit-content" }}>
-                    💬 Go to Session Chat
+                     Go to Session Chat
                   </Link>
                 )}
               </div>
@@ -542,11 +542,11 @@ function MyAnswersSection({ onSolveQuestion, completedList }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>✍️ My Answers</h1>
+        <h1> My Answers</h1>
         <p>Manage your current ongoing study classrooms and complete outstanding questions.</p>
       </div>
 
-      <h2 className="sd-subheading">⚡ Active Tutoring Sessions ({activeSessions.length})</h2>
+      <h2 className="sd-subheading"> Active Tutoring Sessions ({activeSessions.length})</h2>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {activeSessions.length === 0 ? (
           <div style={{ padding: 24, textAlign: "center", color: "var(--text-muted)", background: "white", borderRadius: "var(--radius-md)" }}>
@@ -569,10 +569,10 @@ function MyAnswersSection({ onSolveQuestion, completedList }) {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Link to={`/question/${q.id}`} className="btn btn-secondary btn-sm">
-                    💬 Chat
+                     Chat
                   </Link>
                   <button className="btn btn-primary btn-sm" onClick={() => onSolveQuestion(q)}>
-                    ✅ Complete Session
+                     Complete Session
                   </button>
                 </div>
               </div>
@@ -581,7 +581,7 @@ function MyAnswersSection({ onSolveQuestion, completedList }) {
         )}
       </div>
 
-      <h2 className="sd-subheading" style={{ marginTop: 36 }}>✅ Solved Sessions ({completedList.length})</h2>
+      <h2 className="sd-subheading" style={{ marginTop: 36 }}> Solved Sessions ({completedList.length})</h2>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {completedList.length === 0 ? (
           <div style={{ padding: 24, textAlign: "center", color: "var(--text-muted)", background: "white", borderRadius: "var(--radius-md)" }}>
@@ -626,7 +626,7 @@ function EarningsSection({ balance, ledger }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>💰 My Earnings</h1>
+        <h1> My Earnings</h1>
         <p>Track your paid tutoring milestones, view statement ledgers, and check pending clearings.</p>
       </div>
 
@@ -756,7 +756,7 @@ function WithdrawalsSection({ balance, onWithdraw, withdrawalHistory }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>💳 Withdrawals</h1>
+        <h1> Withdrawals</h1>
         <p>Transfer your earnings directly to your preferred payment processor.</p>
       </div>
 
@@ -769,12 +769,12 @@ function WithdrawalsSection({ balance, onWithdraw, withdrawalHistory }) {
 
             {errorMsg && (
               <div style={{ background: "#FFEBEE", color: "#F44336", padding: 12, borderRadius: "var(--radius-md)", marginBottom: 16, fontSize: 13, fontWeight: 600 }}>
-                ⚠️ {errorMsg}
+                 {errorMsg}
               </div>
             )}
             {successMsg && (
               <div style={{ background: "#E8F5E9", color: "#4CAF50", padding: 12, borderRadius: "var(--radius-md)", marginBottom: 16, fontSize: 13, fontWeight: 600 }}>
-                🎉 {successMsg}
+                 {successMsg}
               </div>
             )}
 
@@ -814,7 +814,7 @@ function WithdrawalsSection({ balance, onWithdraw, withdrawalHistory }) {
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }}>
-                💸 Request Payout
+                 Request Payout
               </button>
             </form>
           </div>
@@ -866,13 +866,13 @@ function NotificationsSection({ notifications, onMarkAllRead, onMarkSingleRead }
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>🔔 Notifications</h1>
+        <h1> Notifications</h1>
         <p>{unreadCount > 0 ? `You have ${unreadCount} new alerts that require your attention.` : "You're all caught up!"}</p>
       </div>
 
       {unreadCount > 0 && (
         <button className="btn btn-secondary btn-sm" style={{ marginBottom: 20 }} onClick={onMarkAllRead}>
-          ✅ Mark all as read
+           Mark all as read
         </button>
       )}
 
@@ -920,7 +920,7 @@ function ProfileSection({ user, profile, setProfile }) {
   return (
     <div className="sd-section">
       <div className="sd-page-header">
-        <h1>👤 My Profile</h1>
+        <h1> My Profile</h1>
         <p>Edit your public tutor bio, rate structures, and subject expertise fields.</p>
       </div>
 
@@ -931,9 +931,9 @@ function ProfileSection({ user, profile, setProfile }) {
             {profile.name.charAt(0)}
           </div>
           <div className="sd-profile-name">{profile.name}</div>
-          <div className="sd-profile-role">🏫 Verified Tutor {profile.isVerified && "✓"}</div>
+          <div className="sd-profile-role"> Verified Tutor {profile.isVerified && ""}</div>
           <div className="sd-profile-stats-mini" style={{ margin: "16px 0" }}>
-            <div><span>4.8★</span><span>Rating</span></div>
+            <div><span>4.8</span><span>Rating</span></div>
             <div><span>89</span><span>Reviews</span></div>
             <div><span>31</span><span>Helped Free</span></div>
           </div>
@@ -941,7 +941,7 @@ function ProfileSection({ user, profile, setProfile }) {
             if (editing) handleSave();
             else setEditing(true);
           }}>
-            {editing ? "✅ Save Changes" : "✏️ Edit Profile"}
+            {editing ? " Save Changes" : " Edit Profile"}
           </button>
         </div>
 
@@ -1061,7 +1061,7 @@ function ProfileSection({ user, profile, setProfile }) {
                 }}
                 onClick={() => setFileUploaded(true)}
               >
-                <span>{fileUploaded ? "📄 credentials_verification.pdf uploaded successfully" : "📁 Click to upload document (PDF, PNG)"}</span>
+                <span>{fileUploaded ? " credentials_verification.pdf uploaded successfully" : " Click to upload document (PDF, PNG)"}</span>
               </div>
               <div>
                 <span
@@ -1085,7 +1085,7 @@ function ProfileSection({ user, profile, setProfile }) {
   );
 }
 
-// ─── MAIN EXPORTED COMPONENT ───
+//  MAIN EXPORTED COMPONENT 
 export default function TutorDashboard({ user }) {
   const [active, setActive] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -1129,7 +1129,7 @@ export default function TutorDashboard({ user }) {
       body: `You submitted a bid of ${newBidData.bidPrice > 0 ? `$${newBidData.bidPrice}/hr` : "FREE"} on "${newBidData.questionTitle}".`,
       time: "Just now",
       read: false,
-      icon: "💬",
+      icon: "",
       color: "#2196F3",
     };
     setNotifications([newNotif, ...notifications]);
@@ -1178,7 +1178,7 @@ export default function TutorDashboard({ user }) {
       body: `You marked the session "${question.title}" as completed. ${amountEarned > 0 ? `$${amountEarned} added to balance.` : "Volunteered successfully!"}`,
       time: "Just now",
       read: false,
-      icon: "✅",
+      icon: "",
       color: "#4CAF50",
     };
     setNotifications([newNotif, ...notifications]);
@@ -1203,7 +1203,7 @@ export default function TutorDashboard({ user }) {
       body: `Your request of $${amount} to ${paymentDetails} has been placed.`,
       time: "Just now",
       read: false,
-      icon: "💳",
+      icon: "",
       color: "#FF9800",
     };
     setNotifications([newNotif, ...notifications]);
@@ -1321,7 +1321,7 @@ export default function TutorDashboard({ user }) {
           </div>
           <div>
             <div className="sd-sidebar-name">{profile.name}</div>
-            <div className="sd-sidebar-role">🏫 Tutor Dashboard</div>
+            <div className="sd-sidebar-role"> Tutor Dashboard</div>
           </div>
         </div>
         <nav className="sd-nav">
@@ -1349,7 +1349,7 @@ export default function TutorDashboard({ user }) {
       <main className="sd-main">
         {/* Mobile header */}
         <div className="sd-mobile-bar">
-          <button className="sd-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}>☰</button>
+          <button className="sd-hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}></button>
           <span className="sd-mobile-title">
             {NAV_ITEMS.find((i) => i.id === active)?.icon}{" "}
             {NAV_ITEMS.find((i) => i.id === active)?.label}

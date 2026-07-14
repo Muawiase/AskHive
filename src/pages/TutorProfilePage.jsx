@@ -8,7 +8,7 @@ function Stars({ rating }) {
     <span>
       {[1, 2, 3, 4, 5].map((i) => (
         <span key={i} style={{ color: i <= Math.round(rating) ? "var(--accent-warm)" : "#ddd", fontSize: 18 }}>
-          ★
+          
         </span>
       ))}
     </span>
@@ -24,7 +24,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
   if (!tutor) {
     return (
       <div className="page" style={{ textAlign: "center", paddingTop: 80 }}>
-        <div style={{ fontSize: 64 }}>🔍</div>
+        <div style={{ fontSize: 64 }}></div>
         <h2 style={{ marginTop: 16 }}>Tutor not found</h2>
         <Link to="/browse" className="btn btn-primary" style={{ marginTop: 24 }}>Back to Browse</Link>
       </div>
@@ -41,7 +41,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
     <div className="page">
       {showModal && <GuestModal onClose={() => setShowModal(false)} />}
 
-      {/* ── BACK ── */}
+      {/*  BACK  */}
       <div style={{ background: "white", borderBottom: "1px solid var(--border)", padding: "12px 0" }}>
         <div className="container">
           <Link to="/browse" style={{ color: "var(--text-secondary)", fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
@@ -51,7 +51,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
       </div>
 
       <div className="container profile-layout">
-        {/* ── SIDEBAR PROFILE CARD ── */}
+        {/*  SIDEBAR PROFILE CARD  */}
         <div>
           <div className="card profile-card">
             <div
@@ -63,9 +63,9 @@ export default function TutorProfilePage({ user, onGuestAction }) {
             <h1 className="profile-name">{tutor.name}</h1>
             <div className="profile-badges">
               {tutor.isVerifiedTutor ? (
-                <span className="badge badge-verified">✓ Verified Tutor</span>
+                <span className="badge badge-verified"> Verified Tutor</span>
               ) : (
-                <span className="badge badge-peer">👥 Peer Student Helper</span>
+                <span className="badge badge-peer"> Peer Student Helper</span>
               )}
             </div>
             <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
@@ -85,14 +85,14 @@ export default function TutorProfilePage({ user, onGuestAction }) {
               </div>
               <div className="profile-stat">
                 <div className="profile-stat-val" style={{ color: "var(--accent-warm)" }}>
-                  {tutor.rating.toFixed(1)}★
+                  {tutor.rating.toFixed(1)}
                 </div>
                 <div className="profile-stat-lbl">Avg. Rating</div>
               </div>
             </div>
 
             <p className="profile-rate">
-              💰 ${tutor.rateMin}–${tutor.rateMax}/hr &nbsp;·&nbsp; 🕐 Replies {tutor.responseTime}
+               ${tutor.rateMin}–${tutor.rateMax}/hr &nbsp;·&nbsp;  Replies {tutor.responseTime}
             </p>
 
             <div style={{ marginBottom: 20 }}>
@@ -127,7 +127,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
                   fontSize: 14,
                 }}
               >
-                ✅ Message sent! {tutor.name.split(" ")[0]} will reply soon.
+                 Message sent! {tutor.name.split(" ")[0]} will reply soon.
               </div>
             ) : (
               <button
@@ -135,7 +135,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
                 style={{ width: "100%", justifyContent: "center" }}
                 onClick={handleMessage}
               >
-                💬 Ask {tutor.name.split(" ")[0]} Directly
+                 Ask {tutor.name.split(" ")[0]} Directly
               </button>
             )}
           </div>
@@ -150,7 +150,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
               padding: "24px",
             }}
           >
-            <div style={{ fontSize: 28, marginBottom: 10 }}>🤝</div>
+            <div style={{ fontSize: 28, marginBottom: 10 }}></div>
             <div style={{ fontWeight: 800, fontSize: 24, marginBottom: 4 }}>
               {tutor.helpedFree} students
             </div>
@@ -160,12 +160,12 @@ export default function TutorProfilePage({ user, onGuestAction }) {
           </div>
         </div>
 
-        {/* ── MAIN CONTENT ── */}
+        {/*  MAIN CONTENT  */}
         <div>
           {/* BIO */}
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-inner">
-              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>👋 About {tutor.name.split(" ")[0]}</h2>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}> About {tutor.name.split(" ")[0]}</h2>
               <p style={{ color: "var(--text-secondary)", lineHeight: 1.8, fontSize: 15 }}>{tutor.bio}</p>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
           {/* EXPERTISE */}
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="card-inner">
-              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>🎯 Expertise</h2>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}> Expertise</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
                 {tutor.subjects.map((s) => (
                   <div
@@ -200,14 +200,14 @@ export default function TutorProfilePage({ user, onGuestAction }) {
           <div className="card">
             <div className="card-inner">
               <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 20 }}>
-                ⭐ Reviews ({tutor.reviewCount})
+                 Reviews ({tutor.reviewCount})
               </h2>
               {tutor.reviews.map((r, i) => (
                 <div className="review-card" key={i}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                     <div className="review-author">{r.author}</div>
                     <span style={{ color: "var(--accent-warm)", fontSize: 14 }}>
-                      {"★".repeat(r.rating)}
+                      {"".repeat(r.rating)}
                     </span>
                   </div>
                   <p className="review-text">"{r.text}"</p>
@@ -230,7 +230,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
           {/* AVAILABILITY */}
           <div className="card" style={{ marginTop: 20 }}>
             <div className="card-inner">
-              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>📅 Availability</h2>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}> Availability</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 8 }}>
                 {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => {
                   const available = [0, 2, 3, 5, 6].includes(i);
@@ -250,7 +250,7 @@ export default function TutorProfilePage({ user, onGuestAction }) {
                     >
                       {day}
                       <div style={{ fontSize: 10, marginTop: 4, fontWeight: 400 }}>
-                        {available ? "✓ Free" : "Busy"}
+                        {available ? " Free" : "Busy"}
                       </div>
                     </div>
                   );

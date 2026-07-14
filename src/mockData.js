@@ -1,10 +1,10 @@
-// ─── MOCK QUESTIONS ───────────────────────────────────────────────────────────
+//  MOCK QUESTIONS 
 export const mockQuestions = [
   {
     id: 1,
     title: "How do I solve quadratic equations using the quadratic formula?",
     subject: "Mathematics",
-    subjectIcon: "📐",
+    subjectIcon: "",
     description:
       "I'm struggling with quadratic equations in my Algebra 2 class. I understand factoring simple ones but when the numbers get messy I'm completely lost. Can someone walk me through the quadratic formula step by step with a real example?",
     level: "High School",
@@ -24,7 +24,7 @@ export const mockQuestions = [
     id: 2,
     title: "Need help debugging my Python Flask REST API — 404 on all routes",
     subject: "Coding",
-    subjectIcon: "💻",
+    subjectIcon: "",
     description:
       "I built a small Flask app for my uni project. When I run it locally everything works fine, but when I deploy to Render I get 404 on every single route. I've been stuck for two days. Will share my code.",
     level: "University",
@@ -44,7 +44,7 @@ export const mockQuestions = [
     id: 3,
     title: "Explain the causes and consequences of the French Revolution",
     subject: "History",
-    subjectIcon: "📜",
+    subjectIcon: "",
     description:
       "My essay is due Friday and I need to understand the social, economic and political causes of the French Revolution and how they connect. Also what were the long-term consequences for Europe?",
     level: "High School",
@@ -64,7 +64,7 @@ export const mockQuestions = [
     id: 4,
     title: "What is the difference between mitosis and meiosis?",
     subject: "Biology",
-    subjectIcon: "🧬",
+    subjectIcon: "",
     description:
       "I keep mixing them up in my exams. I need a clear, simple explanation with a comparison table and memory tricks if possible. This is for my Grade 9 science class.",
     level: "High School",
@@ -84,7 +84,7 @@ export const mockQuestions = [
     id: 5,
     title: "Help me understand supply and demand elasticity — with real examples",
     subject: "Economics",
-    subjectIcon: "📊",
+    subjectIcon: "",
     description:
       "I'm an adult learner taking an online economics certificate. The textbook explanation is too abstract. Can someone explain price elasticity of demand using everyday products I'd recognize?",
     level: "Adult Learner",
@@ -104,7 +104,7 @@ export const mockQuestions = [
     id: 6,
     title: "How do I conjugate French verbs in the passé composé?",
     subject: "Languages",
-    subjectIcon: "🗣️",
+    subjectIcon: "",
     description:
       "I'm learning French as a hobby. I can do present tense but passé composé is confusing me — especially when to use avoir vs être and the agreement rules. Please help with clear examples.",
     level: "Adult Learner",
@@ -124,7 +124,7 @@ export const mockQuestions = [
     id: 7,
     title: "I need to understand Newton's 3 laws with worked physics problems",
     subject: "Physics",
-    subjectIcon: "⚡",
+    subjectIcon: "",
     description:
       "My exam is in 3 days and Newton's laws are worth 30% of the paper. I understand the theory a bit but I freeze on actual calculation problems. Need someone to do 5–6 practice problems with me.",
     level: "High School",
@@ -144,7 +144,7 @@ export const mockQuestions = [
     id: 8,
     title: "Can someone proofread my university personal statement?",
     subject: "Writing",
-    subjectIcon: "✍️",
+    subjectIcon: "",
     description:
       "I'm applying to study medicine. My personal statement is done but I'm not confident about the structure and whether I'm hitting the right points. I'd love feedback from someone who knows what admissions tutors look for.",
     level: "High School",
@@ -164,7 +164,7 @@ export const mockQuestions = [
     id: 9,
     title: "Struggling with integration by parts — calculus help needed",
     subject: "Mathematics",
-    subjectIcon: "📐",
+    subjectIcon: "",
     description:
       "I'm a first-year maths student and integration by parts is destroying me. The formula makes sense but I never know how to choose u and dv. Need step-by-step help with at least 3 different examples.",
     level: "University",
@@ -184,9 +184,9 @@ export const mockQuestions = [
     id: 10,
     title: "What are the key themes in 'To Kill a Mockingbird'?",
     subject: "Literature",
-    subjectIcon: "📚",
+    subjectIcon: "",
     description:
-      "I have a class discussion tomorrow and I haven't finished the book 😅 I need a quick summary of the main themes — justice, racism, moral growth — and some good quotes to reference.",
+      "I have a class discussion tomorrow and I haven't finished the book  I need a quick summary of the main themes — justice, racism, moral growth — and some good quotes to reference.",
     level: "High School",
     grade: "Grade 10",
     isPaid: false,
@@ -202,12 +202,12 @@ export const mockQuestions = [
   },
 ];
 
-// ─── MOCK TUTORS / HELPERS ────────────────────────────────────────────────────
+//  MOCK TUTORS / HELPERS 
 export const mockTutors = [
   {
     id: 1,
     name: "Dr. Fatima Al-Hassan",
-    avatar: "👩🏽‍🏫",
+    avatar: "",
     avatarColor: "#6C63FF",
     bio: "Former university lecturer with 8 years of teaching experience in mathematics and physics. I make complex concepts feel simple and achievable. I love working with students who are ready to put in the effort!",
     subjects: ["Mathematics", "Physics", "Statistics"],
@@ -229,7 +229,7 @@ export const mockTutors = [
   {
     id: 2,
     name: "Marcus Chen",
-    avatar: "👨🏻‍💻",
+    avatar: "",
     avatarColor: "#FF6584",
     bio: "Full-stack developer by day, coding tutor by passion. I've been coding since I was 14 and I genuinely love helping people break through that 'I don't get it' wall. Specialise in Python, JavaScript, and web dev.",
     subjects: ["Coding", "Mathematics", "Computer Science"],
@@ -251,7 +251,7 @@ export const mockTutors = [
   {
     id: 3,
     name: "Isabelle Moreau",
-    avatar: "👩🏼‍🎓",
+    avatar: "",
     avatarColor: "#43C59E",
     bio: "Native French speaker and MA graduate in Modern Languages. I teach French, Spanish and help with essay writing and academic English. I believe language learning should feel fun, not scary.",
     subjects: ["Languages", "Literature", "Writing"],
@@ -273,7 +273,7 @@ export const mockTutors = [
   {
     id: 4,
     name: "Ayaan Patel",
-    avatar: "🧑🏾‍🔬",
+    avatar: "",
     avatarColor: "#FF9F43",
     bio: "Biology & Chemistry PhD student. I help high school and uni students who feel overwhelmed by science subjects. I break things down visually — diagrams, flowcharts, memory devices — whatever it takes.",
     subjects: ["Biology", "Chemistry", "Science"],
@@ -295,7 +295,7 @@ export const mockTutors = [
   {
     id: 5,
     name: "Zara Williams",
-    avatar: "👩🏿‍📚",
+    avatar: "",
     avatarColor: "#A29BFE",
     bio: "Third-year History & Economics student at university. I remember what it's like to be in high school feeling confused, and I genuinely love helping other students. I offer free help whenever I can!",
     subjects: ["History", "Economics", "Social Studies"],
@@ -316,14 +316,14 @@ export const mockTutors = [
   },
 ];
 
-// ─── MOCK USERS ───────────────────────────────────────────────────────────────
+//  MOCK USERS 
 export const mockUsers = {
   student: {
     id: 1,
     name: "Amara K.",
     email: "amara@example.com",
     role: "student",
-    avatar: "🧑🏽‍🎓",
+    avatar: "",
     avatarColor: "#6C63FF",
     level: "High School — Grade 10",
     joinedAt: "2026-01-15",
@@ -334,7 +334,7 @@ export const mockUsers = {
     name: "Marcus Chen",
     email: "marcus@example.com",
     role: "tutor",
-    avatar: "👨🏻‍💻",
+    avatar: "",
     avatarColor: "#FF6584",
     subjects: ["Coding", "Mathematics", "Computer Science"],
     rating: 4.8,
@@ -348,13 +348,13 @@ export const mockUsers = {
     name: "Alex Mercer",
     email: "admin@jonne.com",
     role: "admin",
-    avatar: "⚙️",
+    avatar: "",
     avatarColor: "#2C3E50",
     joinedAt: "2024-01-01",
   },
 };
 
-// ─── MOCK TRANSACTIONS ─────────────────────────────────────────────────────────
+//  MOCK TRANSACTIONS 
 export const mockPlatformTransactions = [
   {
     id: "TXN-8821",
@@ -403,7 +403,7 @@ export const mockPlatformTransactions = [
   }
 ];
 
-// ─── MOCK REPORTS ──────────────────────────────────────────────────────────────
+//  MOCK REPORTS 
 export const mockReports = [
   {
     id: 1,
@@ -438,23 +438,23 @@ export const mockReports = [
 ];
 
 
-// ─── SUBJECTS LIST ────────────────────────────────────────────────────────────
+//  SUBJECTS LIST 
 export const subjects = [
-  { label: "Mathematics", icon: "📐" },
-  { label: "Physics", icon: "⚡" },
-  { label: "Biology", icon: "🧬" },
-  { label: "Chemistry", icon: "⚗️" },
-  { label: "History", icon: "📜" },
-  { label: "Economics", icon: "📊" },
-  { label: "Coding", icon: "💻" },
-  { label: "Languages", icon: "🗣️" },
-  { label: "Literature", icon: "📚" },
-  { label: "Writing", icon: "✍️" },
-  { label: "Science", icon: "🔬" },
-  { label: "Geography", icon: "🌍" },
-  { label: "Art", icon: "🎨" },
-  { label: "Music", icon: "🎵" },
-  { label: "Other", icon: "💡" },
+  { label: "Mathematics", icon: "" },
+  { label: "Physics", icon: "" },
+  { label: "Biology", icon: "" },
+  { label: "Chemistry", icon: "" },
+  { label: "History", icon: "" },
+  { label: "Economics", icon: "" },
+  { label: "Coding", icon: "" },
+  { label: "Languages", icon: "" },
+  { label: "Literature", icon: "" },
+  { label: "Writing", icon: "" },
+  { label: "Science", icon: "" },
+  { label: "Geography", icon: "" },
+  { label: "Art", icon: "" },
+  { label: "Music", icon: "" },
+  { label: "Other", icon: "" },
 ];
 
 export const educationLevels = [

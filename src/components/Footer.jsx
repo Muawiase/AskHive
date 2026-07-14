@@ -76,7 +76,7 @@ export default function Footer() {
                 required
               />
               <button type="submit">
-                {subscribed ? "✓" : "Join"}
+                {subscribed ? "" : "Join"}
               </button>
             </form>
             {subscribed && (

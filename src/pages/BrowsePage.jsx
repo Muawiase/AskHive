@@ -61,7 +61,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
         <GuestModal onClose={() => setShowModal(false)} />
       )}
 
-      {/* ── HERO ── */}
+      {/*  HERO  */}
       <div className="browse-hero">
         <div className="container">
           <h1>
@@ -117,7 +117,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
 
       {tab === "questions" ? (
         <div className="container browse-layout">
-          {/* ── FILTERS ── */}
+          {/*  FILTERS  */}
           <aside className="filters-panel">
             <div className="filters-title">Filters</div>
 
@@ -191,7 +191,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
             </button>
           </aside>
 
-          {/* ── RESULTS ── */}
+          {/*  RESULTS  */}
           <div>
             <div className="results-header">
               <span className="results-count">
@@ -245,7 +245,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
           </div>
         </div>
       ) : (
-        /* ── TUTORS TAB ── */
+        /*  TUTORS TAB  */
         <div className="container" style={{ padding: "40px 24px" }}>
           <div className="questions-grid">
             {mockTutors.map((t) => (

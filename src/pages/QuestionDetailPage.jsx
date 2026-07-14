@@ -74,7 +74,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
     <div className="page">
       {showModal && <GuestModal onClose={() => setShowModal(false)} />}
 
-      {/* ── BACK ── */}
+      {/*  BACK  */}
       <div style={{ background: "white", borderBottom: "1px solid var(--border)", padding: "12px 0" }}>
         <div className="container">
           <Link to="/browse" style={{ color: "var(--text-secondary)", fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
@@ -84,7 +84,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
       </div>
 
       <div className="container detail-layout">
-        {/* ── MAIN ── */}
+        {/*  MAIN  */}
         <div className="detail-main">
           {/* QUESTION HEADER */}
           <div className="card detail-header">
@@ -168,7 +168,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                         <span className="helper-name">{tutor.name}</span>
                       </Link>
                       {tutor.isVerifiedTutor ? (
-                        <span className="badge badge-verified" style={{ fontSize: 11 }}>✓ Verified</span>
+                        <span className="badge badge-verified" style={{ fontSize: 11 }}> Verified</span>
                       ) : (
                         <span className="badge badge-peer" style={{ fontSize: 11 }}>Peer</span>
                       )}
@@ -180,7 +180,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                         <span style={{ color: "var(--primary)", fontWeight: 700 }}>${bid.bidPrice}/hr</span>
                       )}
                       &nbsp;·&nbsp;
-                      <span style={{ color: "var(--accent-warm)" }}>{"★".repeat(Math.floor(tutor.rating))}</span>
+                      <span style={{ color: "var(--accent-warm)" }}>{"".repeat(Math.floor(tutor.rating))}</span>
                       &nbsp;{tutor.rating}
                     </div>
                     <p className="helper-message">"{bid.message}"</p>
@@ -266,7 +266,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           </div>
         </div>
 
-        {/* ── SIDEBAR ── */}
+        {/*  SIDEBAR  */}
         <div className="detail-sidebar">
           {/* QUESTION INFO */}
           <div className="card sidebar-card">

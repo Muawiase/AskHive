@@ -38,7 +38,7 @@ export default function LandingPage({ user }) {
 
   return (
     <div>
-      {/* ── HERO ── */}
+      {/*  HERO  */}
       <section className="hero" style={{ overflow: "hidden", position: "relative" }}>
         <div className="hero-blob" />
         <div className="container" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "40px", alignItems: "center" }}>
@@ -121,7 +121,7 @@ export default function LandingPage({ user }) {
         `}</style>
       </section>
 
-      {/* ── STATS BAR ── */}
+      {/*  STATS BAR  */}
       <div className="stats-bar">
         <div className="container">
           <div className="stats-bar-inner">
@@ -129,7 +129,7 @@ export default function LandingPage({ user }) {
               { num: "12,400+", lbl: "Questions answered" },
               { num: "3,200+", lbl: "Active helpers" },
               { num: "4,800+", lbl: "Free sessions given" },
-              { num: "4.8 ★", lbl: "Average tutor rating" },
+              { num: "4.8 ", lbl: "Average tutor rating" },
             ].map((s) => (
               <div className="stat-item" key={s.lbl}>
                 <div className="stat-item-num">{s.num}</div>
@@ -140,7 +140,7 @@ export default function LandingPage({ user }) {
         </div>
       </div>
 
-      {/* ── SUBJECT ICONS ── */}
+      {/*  SUBJECT ICONS  */}
       <section style={{ padding: "60px 0", background: "var(--bg-main)" }}>
         <div className="container">
           <h2 className="section-title">Every subject. Every level.</h2>
@@ -191,7 +191,7 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
+      {/*  HOW IT WORKS  */}
       <section className="how-section" style={{ background: "white" }}>
         <div className="container">
           <h2 className="section-title">How JONNE works</h2>
@@ -208,7 +208,7 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── FREE vs PAID EXPLAINER ── */}
+      {/*  FREE vs PAID EXPLAINER  */}
       <section style={{ background: "var(--bg-main)", padding: "80px 0" }}>
         <div className="container">
           <h2 className="section-title">Two ways to get help</h2>
@@ -238,7 +238,7 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── FEATURED QUESTIONS ── */}
+      {/*  FEATURED QUESTIONS  */}
       <section className="featured-section">
         <div className="container">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 40 }}>
@@ -262,7 +262,7 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF ── */}
+      {/*  SOCIAL PROOF  */}
       <section style={{ background: "var(--bg-main)", padding: "80px 0" }}>
         <div className="container">
           <h2 className="section-title">What learners say</h2>
@@ -287,7 +287,7 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/* ── FINAL CTA ── */}
+      {/*  FINAL CTA  */}
       <section style={{ background: "linear-gradient(135deg, var(--primary), var(--accent))", padding: "80px 0", color: "white", textAlign: "center" }}>
         <div className="container">
           <h2 style={{ fontSize: 36, fontWeight: 900, marginBottom: 16 }}>Ready to stop being stuck?</h2>

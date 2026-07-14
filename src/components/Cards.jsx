@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function StarRating({ rating }) {
   return (
     <span className="tutor-rating">
-      {"★".repeat(Math.floor(rating))}{"☆".repeat(5 - Math.floor(rating))}
+      {"".repeat(Math.floor(rating))}{"".repeat(5 - Math.floor(rating))}
       <span style={{ color: "var(--text-secondary)", fontWeight: 500, marginLeft: 4 }}>
         {rating.toFixed(1)}
       </span>
@@ -79,7 +79,7 @@ export function TutorCard({ tutor, onGuestAction, user }) {
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
               <span className="tutor-name">{tutor.name}</span>
               {tutor.isVerifiedTutor ? (
-                <span className="badge badge-verified">✓ Verified</span>
+                <span className="badge badge-verified"> Verified</span>
               ) : (
                 <span className="badge badge-peer">Peer</span>
               )}

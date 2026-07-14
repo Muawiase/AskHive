@@ -65,7 +65,7 @@ const team = [
 export default function AboutPage() {
   return (
     <div className="animate-up">
-      {/* ── HERO ── */}
+      {/*  HERO  */}
       <section className="about-hero">
         <div className="container">
           <h1>About <span>JONNE</span></h1>
@@ -76,7 +76,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── OUR STORY ── */}
+      {/*  OUR STORY  */}
       <section className="about-mission">
         <div className="container">
           <div className="about-mission-grid">
@@ -125,7 +125,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── CORE VALUES ── */}
+      {/*  CORE VALUES  */}
       <section className="values-section" style={{ background: "var(--bg-main)" }}>
         <div className="container">
           <h2 className="section-title">Our Core Values</h2>
@@ -144,7 +144,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── THE TEAM ── */}
+      {/*  THE TEAM  */}
       <section className="team-section">
         <div className="container">
           <h2 className="section-title">Meet the Hive Team</h2>
@@ -162,7 +162,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── JOIN US CTA ── */}
+      {/*  JOIN US CTA  */}
       <section style={{ background: "linear-gradient(135deg, var(--primary), var(--accent))", padding: "60px 0", color: "white", textAlign: "center" }}>
         <div className="container">
           <h2 style={{ fontSize: "30px", fontWeight: 800, marginBottom: "12px" }}>Want to make a difference?</h2>

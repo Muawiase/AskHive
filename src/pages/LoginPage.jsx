@@ -205,7 +205,7 @@ export default function LoginPage({ onLogin, user }) {
             color: "var(--primary)",
           }}
         >
-          <strong>💡 Demo tip:</strong> Select Student or Tutor and click Log In to
+          <strong> Demo tip:</strong> Select Student or Tutor and click Log In to
           see different dashboard views. No real credentials needed!
         </div>
       </div>
