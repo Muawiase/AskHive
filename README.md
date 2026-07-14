@@ -1,20 +1,20 @@
-# 🐝 AskHive — Study Help Marketplace (Visual Blueprint)
+# JONNE — Study Help Marketplace
 
-AskHive is a friendly, approachable study-help marketplace prototype designed to connect students who need assistance with verified tutors and peer student helpers. This repository contains the **visual blueprint and interactive frontend prototype** built using React, Vite, and custom CSS.
+JONNE is a premium study-help marketplace designed to connect students who need assistance with verified tutors and peer student helpers. This repository contains the frontend application built using React, Vite, and custom CSS.
 
 ---
 
-## 🚀 Core Concept
+## Core Concept
 
 Students struggling with a subject post a question and choose one of two modes:
 1. **Paid**: Set an hourly rate they are willing to pay for professional tutor assistance.
 2. **Free**: Mark the question as "Help me for free," opening it to any peer student or tutor willing to assist out of goodwill.
 
-Helpers can be **Verified Tutors** (professionals) or **Peer Student Helpers** (fellow students). AskHive welcomes learners of all levels — high schoolers, university students, adult learners, and self-learners.
+Helpers can be **Verified Tutors** (professionals) or **Peer Student Helpers** (fellow students). JONNE welcomes learners of all levels — high schoolers, university students, adult learners, and self-learners.
 
 ---
 
-## 🛠️ Tech Stack
+## Technology Stack
 
 - **Frontend Core**: React (Functional Components + Hooks)
 - **Styling**: Vanilla CSS (Tailored HSL design tokens, soft shadows, rounded components, glassmorphism, responsive grid layouts)
@@ -24,10 +24,10 @@ Helpers can be **Verified Tutors** (professionals) or **Peer Student Helpers** (
 
 ---
 
-## ✨ Screens & Features Built
+## Features
 
-1. **Landing Page**: Explains the core concept with interactive tabs, features animated subject directories, comparison tables (Free vs. Paid), testimonials, and responsive action banners.
-2. **Interactive Search & Browse**: Feed of 10+ mock questions with real-time text search, subject filtering, student-level filtering, sort configurations, and a live "Free-Only" toggle.
+1. **Landing Page**: Explains the core concept with interactive tabs, animated subject directories, comparison tables (Free vs. Paid), testimonials, and responsive action banners.
+2. **Interactive Search & Browse**: Feed of mock questions with real-time text search, subject filtering, student-level filtering, sort configurations, and a live "Free-Only" toggle.
 3. **Question Posting Console**: Form with subject/level selectors, calendar deadlines, mock attachment dropzones, paid/free mode pricing inputs, and a live side-by-side post preview.
 4. **Question Detail & Bid Flow**: Full question descriptions with bids/offers from tutors, status states, and a simulated live chat terminal.
 5. **Tutor Profiles**: Rating stars, review cards, subjects taught, and dynamic availability calendars.
@@ -38,7 +38,7 @@ Helpers can be **Verified Tutors** (professionals) or **Peer Student Helpers** (
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```text
 ├── public/
@@ -67,12 +67,12 @@ Helpers can be **Verified Tutors** (professionals) or **Peer Student Helpers** (
 
 ---
 
-## 🏃‍♂️ How to Run Locally
+## How to Run Locally
 
 ### 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd ANSWER
+cd JONNE
 ```
 
 ### 2. Install dependencies
@@ -94,7 +94,7 @@ Production assets will be built into the `dist/` directory.
 
 ---
 
-## 💡 Demo Tips for Stakeholders
+## Demo Tips for Stakeholders
 
 - **To browse freely**: Click **Continue as Guest** or **Browse Questions** on the Landing Page.
 - **To test the Student experience**: Go to Login, choose **Student / Learner**, and click Log In. Go to "Post a Question" to try out the form.
