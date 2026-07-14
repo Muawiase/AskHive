@@ -48,7 +48,6 @@ export default function Footer() {
             <h3 className="footer-title">Company</h3>
             <ul className="footer-links">
               <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/faq">FAQs</Link></li>
               <li><Link to="/contact">Contact Support</Link></li>
               <li><a href="#careers">Careers</a></li>
             </ul>

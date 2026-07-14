@@ -34,7 +34,6 @@ export default function Navbar({ user, onLogout }) {
         <div className="navbar-links desktop-only" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <Link to="/browse" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Browse</Link>
           <Link to="/about" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>About</Link>
-          <Link to="/faq" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>FAQ</Link>
           <Link to="/contact" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>Contact</Link>
 
           <span style={{ width: 1, height: 20, background: "var(--border)", margin: "0 4px" }}></span>
@@ -110,7 +109,6 @@ export default function Navbar({ user, onLogout }) {
           >
             <Link to="/browse" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>Browse Questions</Link>
             <Link to="/about" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>About Us</Link>
-            <Link to="/faq" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>FAQs</Link>
             <Link to="/contact" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>Contact Us</Link>
             
             <hr style={{ border: "none", borderTop: "1px solid var(--border)", margin: "4px 0" }} />

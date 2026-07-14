@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 import BrowsePage from "./pages/BrowsePage";
 import PostQuestionPage from "./pages/PostQuestionPage";
 import QuestionDetailPage from "./pages/QuestionDetailPage";
@@ -53,6 +54,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage user={user} />} />
         <Route path="/login" element={<LoginPage onLogin={login} user={user} />} />
+        <Route path="/signup" element={<SignupPage onLogin={login} user={user} />} />
         <Route
           path="/browse"
           element={<BrowsePage user={user} onGuestAction={() => setShowGuestModal(true)} />}

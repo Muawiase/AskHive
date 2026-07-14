@@ -67,7 +67,7 @@ export default function LandingPage({ user }) {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
+                  <Link to="/signup" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
                     Get Started Free
                   </Link>
                   <Link to="/browse" className="btn btn-ghost btn-lg">
@@ -295,7 +295,7 @@ export default function LandingPage({ user }) {
             Join thousands of learners who've already found their spark with JONNE.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link to="/login" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
+            <Link to="/signup" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
               Sign Up — It's Free
             </Link>
             <Link to="/browse" className="btn btn-ghost btn-lg">

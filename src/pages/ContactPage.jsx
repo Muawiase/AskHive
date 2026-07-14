@@ -12,11 +12,31 @@ export default function ContactPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 1000);
+    
+    fetch("https://formsubmit.co/ajax/muawiase@gmail.com", {
+      method: "POST",
+      headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+          name,
+          email,
+          topic,
+          message,
+          _subject: `New contact from ${name}`
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+        setLoading(false);
+        setSuccess(true);
+    })
+    .catch(error => {
+        console.error(error);
+        setLoading(false);
+        setSuccess(true);
+    });
   };
 
   const handleReset = () => {
@@ -56,19 +76,18 @@ export default function ContactPage() {
                 </div>
                 <div className="contact-detail-text">
                   <h4>Email Support</h4>
-                  <p>support@jonne.com</p>
+                  <p>muawiase@gmail.com</p>
                   <p style={{ fontSize: "12px", opacity: 0.7 }}>Average response time: &lt; 24 hrs</p>
                 </div>
               </div>
 
               <div className="contact-detail-item">
                 <div className="contact-detail-icon" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </div>
                 <div className="contact-detail-text">
-                  <h4>Support Hours</h4>
-                  <p>Monday - Friday</p>
-                  <p>9:00 AM - 6:00 PM EST</p>
+                  <h4>WhatsApp</h4>
+                  <p>+256792427398</p>
                 </div>
               </div>
 
