@@ -5,35 +5,32 @@ import { QuestionCard } from "../components/Cards";
 const howSteps = [
   {
     number: 1,
-    icon: "📝",
     title: "Post your question",
     desc: "Describe what you're stuck on — any subject, any level. Add as much detail as you like.",
   },
   {
     number: 2,
-    icon: "💸",
     title: "Set your terms",
     desc: "Choose a price per hour you're comfortable with, or mark it free. You decide.",
   },
   {
     number: 3,
-    icon: "🤝",
     title: "Get matched & learn",
     desc: "Tutors and peer students offer to help. Pick the best fit and start learning.",
   },
 ];
 
 const subjects = [
-  { icon: "📐", label: "Maths" },
-  { icon: "⚡", label: "Physics" },
-  { icon: "🧬", label: "Biology" },
-  { icon: "⚗️", label: "Chemistry" },
-  { icon: "💻", label: "Coding" },
-  { icon: "🗣️", label: "Languages" },
-  { icon: "📜", label: "History" },
-  { icon: "📊", label: "Economics" },
-  { icon: "📚", label: "Literature" },
-  { icon: "✍️", label: "Writing" },
+  { label: "Maths" },
+  { label: "Physics" },
+  { label: "Biology" },
+  { label: "Chemistry" },
+  { label: "Coding" },
+  { label: "Languages" },
+  { label: "History" },
+  { label: "Economics" },
+  { label: "Literature" },
+  { label: "Writing" },
 ];
 
 export default function LandingPage({ user }) {
@@ -47,7 +44,7 @@ export default function LandingPage({ user }) {
         <div className="container" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "40px", alignItems: "center" }}>
           <div className="hero-content animate-up" style={{ zIndex: 2 }}>
             <div className="hero-eyebrow">
-              🐝 Study help for everyone — free or paid
+              Study help for everyone — free or paid
             </div>
             <h1>
               Stuck on something?<br />
@@ -62,19 +59,19 @@ export default function LandingPage({ user }) {
               {user ? (
                 <>
                   <Link to="/browse" className="btn btn-ghost btn-lg">
-                    🔍 Browse Questions
+                    Browse Questions
                   </Link>
                   <Link to="/post" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
-                    ✏️ Post a Question
+                    Post a Question
                   </Link>
                 </>
               ) : (
                 <>
                   <Link to="/login" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
-                    🚀 Get Started Free
+                    Get Started Free
                   </Link>
                   <Link to="/browse" className="btn btn-ghost btn-lg">
-                    👀 Browse as Guest
+                    Browse as Guest
                   </Link>
                 </>
               )}
@@ -86,7 +83,7 @@ export default function LandingPage({ user }) {
             <div className="card glass-panel float-slow" style={{ position: "absolute", top: "10px", left: "20px", width: "280px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: "var(--radius-md)", background: "rgba(255,255,255,0.15)", color: "white", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}>
               <div className="card-inner" style={{ padding: "16px 20px" }}>
                 <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
-                  <div style={{ background: "var(--accent)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>🧑‍💻</div>
+                  <div style={{ background: "var(--accent)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 700 }}>TD</div>
                   <div>
                     <h4 style={{ fontSize: "14px", fontWeight: 700 }}>Python Flask API</h4>
                     <span style={{ fontSize: "11px", opacity: 0.8 }}>Matched with Tutor Dave</span>
@@ -99,7 +96,7 @@ export default function LandingPage({ user }) {
             <div className="card glass-panel float-delayed" style={{ position: "absolute", bottom: "20px", right: "10px", width: "260px", border: "1px solid rgba(255,255,255,0.4)", borderRadius: "var(--radius-md)", background: "rgba(255,255,255,0.2)", color: "white", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}>
               <div className="card-inner" style={{ padding: "16px 20px" }}>
                 <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
-                  <div style={{ background: "var(--free-color)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px" }}>📐</div>
+                  <div style={{ background: "var(--free-color)", color: "white", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: 700 }}>AH</div>
                   <div>
                     <h4 style={{ fontSize: "14px", fontWeight: 700 }}>Algebra Help</h4>
                     <span className="badge badge-free" style={{ padding: "1px 6px", fontSize: "9px" }}>FREE</span>
@@ -185,8 +182,7 @@ export default function LandingPage({ user }) {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <div style={{ fontSize: 28 }}>{s.icon}</div>
-                <div style={{ fontSize: 13, fontWeight: 600, marginTop: 6, color: "var(--text-secondary)" }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
                   {s.label}
                 </div>
               </div>
@@ -204,7 +200,6 @@ export default function LandingPage({ user }) {
             {howSteps.map((step) => (
               <div className="card step-card" key={step.number}>
                 <div className="step-number">{step.number}</div>
-                <div className="step-icon">{step.icon}</div>
                 <h3 className="step-title">{step.title}</h3>
                 <p className="step-desc">{step.desc}</p>
               </div>
@@ -221,24 +216,22 @@ export default function LandingPage({ user }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24, maxWidth: 760, margin: "0 auto" }}>
             <div className="card" style={{ borderTop: "4px solid var(--free-color)" }}>
               <div className="card-inner" style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 48, marginBottom: 16 }}>🤝</div>
-                <h3 style={{ fontSize: 22, fontWeight: 800, color: "var(--free-color)", marginBottom: 12 }}>Free Help</h3>
+                <h3 style={{ fontSize: 22, fontWeight: 800, color: "var(--free-color)", marginBottom: 12, marginTop: 12 }}>Free Help</h3>
                 <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20 }}>
                   Mark your question as free and open it to the community. Peer
                   students and generous tutors help out of goodwill — no payment needed.
                 </p>
-                <span className="badge badge-free" style={{ fontSize: 14, padding: "6px 16px" }}>✅ FREE</span>
+                <span className="badge badge-free" style={{ fontSize: 14, padding: "6px 16px" }}>FREE</span>
               </div>
             </div>
             <div className="card" style={{ borderTop: "4px solid var(--primary)" }}>
               <div className="card-inner" style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 48, marginBottom: 16 }}>💰</div>
-                <h3 style={{ fontSize: 22, font: 800, fontWeight: 800, color: "var(--primary)", marginBottom: 12 }}>Paid Help</h3>
+                <h3 style={{ fontSize: 22, fontWeight: 800, color: "var(--primary)", marginBottom: 12, marginTop: 12 }}>Paid Help</h3>
                 <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20 }}>
                   Set an hourly rate you're comfortable paying and get matched with
                   verified tutors who bring professional-level knowledge and experience.
                 </p>
-                <span className="badge badge-paid" style={{ fontSize: 14, padding: "6px 16px" }}>💰 $15–25/hr</span>
+                <span className="badge badge-paid" style={{ fontSize: 14, padding: "6px 16px" }}>$15–25/hr</span>
               </div>
             </div>
           </div>
@@ -276,13 +269,13 @@ export default function LandingPage({ user }) {
           <p className="section-sub">Real stories from the JONNE community.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
             {[
-              { text: "I was panicking about my physics exam and posted at midnight. By 8am I had 3 tutors offering help. Ended up passing with flying colours.", author: "Priya S. — Grade 12", avatar: "🧑🏽‍🎓" },
-              { text: "I'm 34 and going back to study economics after years away. JONNE makes me feel like I'm not alone — no judgment, just help.", author: "Rachel T. — Adult Learner", avatar: "👩🏼‍💼" },
-              { text: "As a tutor, I love that I can choose to help for free sometimes. The impact counter is a nice touch — I've helped 45 students!", author: "Ayaan P. — Peer Helper", avatar: "🧑🏾‍🔬" },
+              { text: "I was panicking about my physics exam and posted at midnight. By 8am I had 3 tutors offering help. Ended up passing with flying colours.", author: "Priya S. — Grade 12", avatar: "PS" },
+              { text: "I'm 34 and going back to study economics after years away. JONNE makes me feel like I'm not alone — no judgment, just help.", author: "Rachel T. — Adult Learner", avatar: "RT" },
+              { text: "As a tutor, I love that I can choose to help for free sometimes. The impact counter is a nice touch — I've helped 45 students!", author: "Ayaan P. — Peer Helper", avatar: "AP" },
             ].map((r, i) => (
               <div className="card" key={i}>
                 <div className="card-inner">
-                  <div style={{ fontSize: 28, marginBottom: 14 }}>{r.avatar}</div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "var(--primary-light)", color: "var(--primary)", width: "36px", height: "36px", borderRadius: "50%", fontSize: "13px", fontWeight: 700, marginBottom: 14 }}>{r.avatar}</div>
                   <p style={{ color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.7, marginBottom: 16, fontSize: 14 }}>
                     "{r.text}"
                   </p>
@@ -303,7 +296,7 @@ export default function LandingPage({ user }) {
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/login" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
-              🚀 Sign Up — It's Free
+              Sign Up — It's Free
             </Link>
             <Link to="/browse" className="btn btn-ghost btn-lg">
               Browse Questions First

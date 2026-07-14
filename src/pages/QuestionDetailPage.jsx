@@ -45,7 +45,9 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
   if (!question) {
     return (
       <div className="page" style={{ textAlign: "center", paddingTop: 80 }}>
-        <div style={{ fontSize: 64 }}>🔍</div>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: "var(--text-muted)", fontStyle: "normal" }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
         <h2 style={{ marginTop: 16 }}>Question not found</h2>
         <Link to="/browse" className="btn btn-primary" style={{ marginTop: 24 }}>Back to Browse</Link>
       </div>
@@ -87,11 +89,11 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           {/* QUESTION HEADER */}
           <div className="card detail-header">
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <span className="badge badge-subject">{question.subjectIcon} {question.subject}</span>
+              <span className="badge badge-subject">{question.subject}</span>
               {question.isPaid ? (
-                <span className="badge badge-paid">💰 ${question.pricePerHour}/hr</span>
+                <span className="badge badge-paid">${question.pricePerHour}/hr</span>
               ) : (
-                <span className="badge badge-free">✅ FREE</span>
+                <span className="badge badge-free">FREE</span>
               )}
               <span className="badge badge-level">{question.level} — {question.grade}</span>
               <span
@@ -114,20 +116,20 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
             <h1 className="detail-title">{question.title}</h1>
             <div className="detail-meta">
               <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-                👤 Posted by <strong>{question.studentName}</strong>
+                Posted by <strong>{question.studentName}</strong>
               </span>
               <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-                📅 Due {new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                Due {new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
               </span>
               <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-                💬 {question.responses} responses
+                {question.responses} responses
               </span>
             </div>
           </div>
 
           {/* DESCRIPTION */}
           <div className="card detail-description">
-            <h3>📄 Full Question</h3>
+            <h3>Full Question</h3>
             <p style={{ marginTop: 14 }}>{question.description}</p>
             <div className="tags-row" style={{ marginTop: 20 }}>
               {question.tags.map((t) => <span className="tag" key={t}>#{t}</span>)}
@@ -137,7 +139,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           {/* HELPERS / BIDS */}
           <div className="card helpers-section">
             <div className="helpers-title">
-              🙋 {question.isPaid ? "Tutor Bids" : "Volunteers"} ({mockBids.length})
+              {question.isPaid ? "Tutor Bids" : "Volunteers"} ({mockBids.length})
               {!user && (
                 <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 400 }}>
                   — Sign up to accept a helper
@@ -156,8 +158,8 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                   style={isAccepted ? { borderColor: "var(--success)", background: "var(--success-light)" } : {}}
                 >
                   <Link to={`/tutor/${tutor.id}`}>
-                    <div style={{ width: 52, height: 52, borderRadius: "50%", background: tutor.avatarColor + "22", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0 }}>
-                      {tutor.avatar}
+                    <div style={{ width: 52, height: 52, borderRadius: "50%", background: tutor.avatarColor + "22", color: tutor.avatarColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, flexShrink: 0 }}>
+                      {tutor.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
                     </div>
                   </Link>
                   <div className="helper-info">
@@ -168,14 +170,14 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                       {tutor.isVerifiedTutor ? (
                         <span className="badge badge-verified" style={{ fontSize: 11 }}>✓ Verified</span>
                       ) : (
-                        <span className="badge badge-peer" style={{ fontSize: 11 }}>👥 Peer</span>
+                        <span className="badge badge-peer" style={{ fontSize: 11 }}>Peer</span>
                       )}
                     </div>
                     <div className="helper-bid">
                       {bid.bidPrice === 0 ? (
-                        <span style={{ color: "var(--free-color)", fontWeight: 700 }}>✅ Offering free help</span>
+                        <span style={{ color: "var(--free-color)", fontWeight: 700 }}>Offering free help</span>
                       ) : (
-                        <span style={{ color: "var(--primary)", fontWeight: 700 }}>💰 ${bid.bidPrice}/hr</span>
+                        <span style={{ color: "var(--primary)", fontWeight: 700 }}>${bid.bidPrice}/hr</span>
                       )}
                       &nbsp;·&nbsp;
                       <span style={{ color: "var(--accent-warm)" }}>{"★".repeat(Math.floor(tutor.rating))}</span>
@@ -185,7 +187,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                   </div>
                   <div>
                     {isAccepted ? (
-                      <span className="badge badge-free" style={{ padding: "8px 14px" }}>✅ Accepted</span>
+                      <span className="badge badge-free" style={{ padding: "8px 14px" }}>Accepted</span>
                     ) : (
                       <button
                         className="btn btn-sm btn-success"
@@ -215,7 +217,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.background = "var(--primary-light)"}
                 onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-                onClick={() => alert("In a real app, this would open a bid/offer form! 🎓")}
+                onClick={() => alert("In a real app, this would open a bid/offer form!")}
               >
                 + Offer to help {question.isPaid ? `at your rate` : "for free"}
               </div>
@@ -225,7 +227,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           {/* CHAT */}
           <div className="card chat-thread">
             <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
-              💬 Discussion Thread
+              Discussion Thread
             </h3>
             {chatMessages.map((msg, i) => (
               <div key={i}>
@@ -268,9 +270,9 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
         <div className="detail-sidebar">
           {/* QUESTION INFO */}
           <div className="card sidebar-card">
-            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>📋 Quick Info</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Quick Info</h3>
             {[
-              ["Subject", `${question.subjectIcon} ${question.subject}`],
+              ["Subject", question.subject],
               ["Level", question.grade],
               ["Deadline", new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })],
               ["Help Type", question.isPaid ? `Paid — $${question.pricePerHour}/hr` : "Free"],
@@ -286,9 +288,11 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
 
           {/* STUDENT PROFILE */}
           <div className="card sidebar-card">
-            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>👤 Asked by</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Asked by</h3>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 10 }}>🧑🏽‍🎓</div>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--primary-light)", color: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, margin: "0 auto 10px" }}>
+                {question.studentName.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
+              </div>
               <div style={{ fontWeight: 700 }}>{question.studentName}</div>
               <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>{question.grade}</div>
               <div style={{ fontSize: 13, color: "var(--text-muted)" }}>3 questions posted</div>
@@ -299,7 +303,6 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           {!user && (
             <div className="card sidebar-card" style={{ background: "var(--primary)", color: "white" }}>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>🎓</div>
                 <h3 style={{ fontWeight: 700, marginBottom: 8 }}>Can you help?</h3>
                 <p style={{ opacity: 0.85, fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
                   Sign up to offer your expertise and earn money (or give back for free).

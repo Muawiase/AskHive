@@ -2,17 +2,34 @@ import { Link } from "react-router-dom";
 
 const values = [
   {
-    icon: "🌍",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+    ),
     title: "Accessibility First",
     desc: "We believe quality learning support shouldn't be a luxury. That's why JONNE supports both free community-based help and budget-friendly paid options."
   },
   {
-    icon: "🤝",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
     title: "Community Trust",
     desc: "Every interaction is built on mutual respect and shared success. Ratings, reviews, and badges help maintain a safe, constructive learning environment."
   },
   {
-    icon: "⚡",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    ),
     title: "Active Learning",
     desc: "Asking the right questions is the first step to understanding. Our platform encourages dialogue and explanations rather than just giving away copy-paste answers."
   }
@@ -20,25 +37,25 @@ const values = [
 
 const team = [
   {
-    avatar: "👩‍🚀",
+    avatar: "CM",
     name: "Dr. Clara Mercer",
     role: "Co-Founder & CEO",
     bio: "Former university professor and EdTech researcher. Passionate about reforming online peer learning spaces."
   },
   {
-    avatar: "🧑‍💻",
+    avatar: "AK",
     name: "Amara Kone",
     role: "Lead Engineer",
     bio: "Full-stack developer who loves creating sleek, fast, and accessible learning interfaces."
   },
   {
-    avatar: "🧑‍🏫",
+    avatar: "DV",
     name: "David Vance",
     role: "Head of Tutor Relations",
     bio: "Coordinates verification criteria and ensures our helper community has all the tools they need to tutor effectively."
   },
   {
-    avatar: "👩‍🎨",
+    avatar: "LN",
     name: "Lila Nguyen",
     role: "Lead Product Designer",
     bio: "Focuses on micro-animations and intuitive flows to make studying feel less like a chore and more like a community hub."
@@ -135,7 +152,7 @@ export default function AboutPage() {
           <div className="team-grid">
             {team.map((t, idx) => (
               <div className="team-card" key={idx}>
-                <div className="team-avatar">{t.avatar}</div>
+                <div className="team-avatar" style={{ fontSize: "24px", fontWeight: 700, color: "var(--primary)" }}>{t.avatar}</div>
                 <h3 className="team-name">{t.name}</h3>
                 <div className="team-role">{t.role}</div>
                 <p className="team-bio">{t.bio}</p>
@@ -153,7 +170,7 @@ export default function AboutPage() {
             Join our tutoring team today and help students worldwide get unstuck, while earning at your own rate.
           </p>
           <Link to="/login" className="btn" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
-            🚀 Join the Hive Today
+            Join the Hive Today
           </Link>
         </div>
       </section>

@@ -19,14 +19,14 @@ export function QuestionCard({ question, onGuestAction, user }) {
         <div className="question-card-header">
           <div className="question-card-badges">
             <span className="badge badge-subject">
-              {question.subjectIcon} {question.subject}
+              {question.subject}
             </span>
             {question.isPaid ? (
               <span className="badge badge-paid">
-                💰 ${question.pricePerHour}/hr
+                ${question.pricePerHour}/hr
               </span>
             ) : (
-              <span className="badge badge-free">✅ FREE</span>
+              <span className="badge badge-free">FREE</span>
             )}
             <span className="badge badge-level">{question.level}</span>
           </div>
@@ -47,9 +47,9 @@ export function QuestionCard({ question, onGuestAction, user }) {
         </div>
         <div className="question-card-footer">
           <div className="question-card-meta">
-            <span>👤 {question.studentName}</span>
-            <span>💬 {question.responses} {question.responses === 1 ? "response" : "responses"}</span>
-            <span>📅 Due {new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
+            <span>by {question.studentName}</span>
+            <span>{question.responses} {question.responses === 1 ? "response" : "responses"}</span>
+            <span>Due {new Date(question.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
           </div>
           <Link to={`/question/${question.id}`}>
             <button className="btn btn-sm btn-primary" onClick={() => {
@@ -71,9 +71,9 @@ export function TutorCard({ tutor, onGuestAction, user }) {
         <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
           <div
             className="tutor-avatar-wrap"
-            style={{ background: tutor.avatarColor + "22", fontSize: 32 }}
+            style={{ background: tutor.avatarColor + "22", color: tutor.avatarColor, fontSize: 16, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}
           >
-            {tutor.avatar}
+            {tutor.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -81,12 +81,12 @@ export function TutorCard({ tutor, onGuestAction, user }) {
               {tutor.isVerifiedTutor ? (
                 <span className="badge badge-verified">✓ Verified</span>
               ) : (
-                <span className="badge badge-peer">👥 Peer</span>
+                <span className="badge badge-peer">Peer</span>
               )}
             </div>
             <StarRating rating={tutor.rating} />
             <div className="tutor-rate" style={{ marginTop: 4 }}>
-              💰 ${tutor.rateMin}–${tutor.rateMax}/hr &nbsp;·&nbsp; 🕐 {tutor.responseTime}
+              ${tutor.rateMin}–${tutor.rateMax}/hr &nbsp;·&nbsp; Replies {tutor.responseTime}
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ export function TutorCard({ tutor, onGuestAction, user }) {
             className="btn btn-sm btn-primary"
             onClick={() => { if (!user) onGuestAction?.(); }}
           >
-            💬 Message
+            Message
           </button>
         </div>
       </div>

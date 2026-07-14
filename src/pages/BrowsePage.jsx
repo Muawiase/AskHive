@@ -65,7 +65,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
       <div className="browse-hero">
         <div className="container">
           <h1>
-            {user?.role === "tutor" ? "🎓 Find Questions to Answer" : "🔍 Browse Questions"}
+            {user?.role === "tutor" ? "Find Questions to Answer" : "Browse Questions"}
           </h1>
           <p>
             {user
@@ -84,7 +84,9 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button>🔍</button>
+              <button style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
             </div>
           </div>
 
@@ -106,7 +108,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
                   transition: "all 0.2s",
                 }}
               >
-                {t === "questions" ? "📋 Questions" : "👩‍🏫 Tutors & Helpers"}
+                {t === "questions" ? "Questions" : "Tutors & Helpers"}
               </button>
             ))}
           </div>
@@ -117,7 +119,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
         <div className="container browse-layout">
           {/* ── FILTERS ── */}
           <aside className="filters-panel">
-            <div className="filters-title">🎛️ Filters</div>
+            <div className="filters-title">Filters</div>
 
             <div className="filter-group">
               <div className="filter-label">Subject</div>
@@ -129,7 +131,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
                 <option value="All">All Subjects</option>
                 {subjects.map((s) => (
                   <option key={s.label} value={s.label}>
-                    {s.icon} {s.label}
+                    {s.label}
                   </option>
                 ))}
               </select>
@@ -158,7 +160,7 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
                   <div className="toggle-thumb" />
                 </div>
                 <span style={{ fontSize: 14, color: freeOnly ? "var(--free-color)" : "var(--text-secondary)", fontWeight: 600 }}>
-                  {freeOnly ? "✅ Free questions only" : "Show all"}
+                  {freeOnly ? "Free questions only" : "Show all"}
                 </span>
               </label>
             </div>
@@ -212,7 +214,9 @@ export default function BrowsePage({ user, onGuestAction, forceGuestModal }) {
 
             {filtered.length === 0 ? (
               <div className="card no-results">
-                <div className="no-results-icon">🔍</div>
+                <div className="no-results-icon" style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: "var(--text-muted)", fontStyle: "normal" }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>No questions found</h3>
                 <p style={{ color: "var(--text-secondary)", marginBottom: 24 }}>
                   Try adjusting your filters or search term.

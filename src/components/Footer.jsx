@@ -36,11 +36,11 @@ export default function Footer() {
               JONNE connects students and learners with verified tutors and peer
               helpers. Get unstuck, teach others, and study on your own terms.
             </p>
-            <div className="footer-socials">
-              <a href="#twitter" aria-label="Twitter">🐦</a>
-              <a href="#github" aria-label="GitHub">💻</a>
-              <a href="#linkedin" aria-label="LinkedIn">🔗</a>
-              <a href="#youtube" aria-label="YouTube">📺</a>
+            <div className="footer-socials" style={{ fontSize: "14px" }}>
+              <a href="#twitter" aria-label="Twitter">Twitter</a>
+              <a href="#github" aria-label="GitHub">GitHub</a>
+              <a href="#linkedin" aria-label="LinkedIn">LinkedIn</a>
+              <a href="#youtube" aria-label="YouTube">YouTube</a>
             </div>
           </div>
 
@@ -81,14 +81,14 @@ export default function Footer() {
             </form>
             {subscribed && (
               <span style={{ fontSize: 12, color: "var(--success)", fontWeight: 600, marginTop: 6, display: "inline-block" }}>
-                Thanks for subscribing! 🎉
+                Thanks for subscribing!
               </span>
             )}
           </div>
         </div>
 
         <div className="footer-bottom">
-          <div>© 2026 JONNE. Built with ♥ for learners everywhere.</div>
+          <div>© 2026 JONNE. Built for learners everywhere.</div>
           <div style={{ display: "flex", gap: 20 }}>
             <a href="#privacy" style={{ color: "inherit" }}>Privacy Policy</a>
             <a href="#terms" style={{ color: "inherit" }}>Terms of Service</a>

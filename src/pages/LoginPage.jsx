@@ -110,14 +110,14 @@ export default function LoginPage({ onLogin, user }) {
                 className={`role-btn ${role === "student" ? "active" : ""}`}
                 onClick={() => setRole("student")}
               >
-                📚 Student / Learner
+                Student / Learner
               </button>
               <button
                 type="button"
                 className={`role-btn ${role === "tutor" ? "active" : ""}`}
                 onClick={() => setRole("tutor")}
               >
-                🎓 Tutor / Helper
+                Tutor / Helper
               </button>
             </div>
             <p className="form-hint">
@@ -134,7 +134,7 @@ export default function LoginPage({ onLogin, user }) {
             disabled={submitted}
           >
             {submitted
-              ? "✅ Logging you in…"
+              ? "Logging you in…"
               : mode === "login"
               ? "Log In →"
               : "Create Account →"}

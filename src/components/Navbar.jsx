@@ -1,6 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+const getInitials = (name) => {
+  if (!name) return "";
+  return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+};
+
 export default function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,7 +43,7 @@ export default function Navbar({ user, onLogout }) {
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               {user.role === "student" && (
                 <Link to="/post" className="btn btn-sm btn-secondary" style={{ borderRadius: "var(--radius-sm)" }}>
-                  ✏️ Post Question
+                  Post Question
                 </Link>
               )}
               <Link to={dashboardPath} style={{ fontWeight: 600, color: "var(--primary)" }}>
@@ -47,9 +52,9 @@ export default function Navbar({ user, onLogout }) {
               <div className="navbar-user" style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <div
                   className="navbar-avatar"
-                  style={{ background: user.avatarColor, width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700 }}
+                  style={{ background: user.avatarColor, width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 13 }}
                 >
-                  {user.avatar}
+                  {getInitials(user.name)}
                 </div>
                 <button
                   className="btn btn-sm"
@@ -103,10 +108,10 @@ export default function Navbar({ user, onLogout }) {
               zIndex: 150
             }}
           >
-            <Link to="/browse" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>🔍 Browse Questions</Link>
-            <Link to="/about" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>ℹ️ About Us</Link>
-            <Link to="/faq" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>❓ FAQs</Link>
-            <Link to="/contact" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>✉️ Contact Us</Link>
+            <Link to="/browse" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>Browse Questions</Link>
+            <Link to="/about" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>About Us</Link>
+            <Link to="/faq" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>FAQs</Link>
+            <Link to="/contact" onClick={closeMobile} style={{ fontSize: "16px", fontWeight: 600 }}>Contact Us</Link>
             
             <hr style={{ border: "none", borderTop: "1px solid var(--border)", margin: "4px 0" }} />
 
@@ -115,22 +120,22 @@ export default function Navbar({ user, onLogout }) {
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div
                     className="navbar-avatar"
-                    style={{ background: user.avatarColor, width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700 }}
+                    style={{ background: user.avatarColor, width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 14 }}
                   >
-                    {user.avatar}
+                    {getInitials(user.name)}
                   </div>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: "14px" }}>{user.name}</div>
-                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{user.role === "tutor" ? "🎓 Tutor" : "📚 Student"}</div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{user.role === "tutor" ? "Tutor" : "Student"}</div>
                   </div>
                 </div>
                 {user.role === "student" && (
                   <Link to="/post" onClick={closeMobile} className="btn btn-secondary" style={{ width: "100%", justifyContent: "center" }}>
-                    ✏️ Post a Question
+                    Post a Question
                   </Link>
                 )}
                 <Link to={dashboardPath} onClick={closeMobile} className="btn btn-primary" style={{ width: "100%", justifyContent: "center", color: "white" }}>
-                  📋 My Dashboard
+                  My Dashboard
                 </Link>
                 <button
                   className="btn"
@@ -142,7 +147,7 @@ export default function Navbar({ user, onLogout }) {
               </div>
             ) : (
               <Link to="/login" onClick={closeMobile} className="btn btn-primary" style={{ width: "100%", justifyContent: "center", color: "white" }}>
-                🚀 Log In / Sign Up
+                Log In / Sign Up
               </Link>
             )}
           </div>
