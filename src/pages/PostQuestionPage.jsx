@@ -76,9 +76,10 @@ export default function PostQuestionPage({ user }) {
 
     // Force user to re-login if they still have the old mock session (where id is a number)
     if (typeof user.id !== "string" || user.id.length < 10) {
-      const msg = "Your login session is out of date. Please log out and log back in to post questions.";
-      setError(msg);
-      alert(msg);
+      alert("Your login session is out of date. Logging you out to refresh your session.");
+      supabase.auth.signOut().then(() => {
+        window.location.reload();
+      });
       return;
     }
 
