@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { mockQuestions } from "../mockData";
+import { supabase } from "../supabase";
 
 //  MOCK DATA 
 const myQuestions = [
@@ -314,6 +315,8 @@ function PostQuestionSection({ user }) {
   const [attachedFile, setAttachedFile] = useState(null);
   const [fileError, setFileError]   = useState("");
   const [submitted, setSubmitted]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError]           = useState("");
 
   const ALLOWED_TYPES = [
     "application/pdf",
@@ -347,13 +350,46 @@ function PostQuestionSection({ user }) {
   ];
   const levels = ["Primary", "Middle School", "High School", "University", "Professional"];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    setForm({ title: "", subject: "", level: "", description: "", deadline: "", isPaid: false, price: "" });
-    setAttachedFile(null);
-    setFileError("");
+    setError("");
+
+    if (!user) {
+      setError("You must be logged in to post a question.");
+      return;
+    }
+
+    if (typeof user.id !== "string" || user.id.length < 10) {
+      alert("Your login session is out of date. Logging you out to refresh your session.");
+      supabase.auth.signOut().then(() => window.location.reload());
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { error: insertError } = await supabase.from("questions").insert({
+        user_id: user.id,
+        title: form.title,
+        subject: form.subject,
+        level: form.level,
+        description: form.description,
+        deadline: form.deadline || null,
+        payment: form.isPaid ? Number(form.price) : null,
+      });
+
+      if (insertError) throw insertError;
+
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+      setForm({ title: "", subject: "", level: "", description: "", deadline: "", isPaid: false, price: "" });
+      setAttachedFile(null);
+      setFileError("");
+    } catch (err) {
+      console.error("Question insert error:", err);
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -364,6 +400,11 @@ function PostQuestionSection({ user }) {
       </div>
       {submitted && (
         <div className="sd-alert sd-alert-success"> Your question has been posted! Tutors will start bidding soon.</div>
+      )}
+      {error && (
+        <div className="sd-alert" style={{ background: "#ffebee", color: "#c62828", border: "1px solid #ef9a9a" }}>
+          {error}
+        </div>
       )}
       <div className="sd-form-card">
         <form onSubmit={handleSubmit} className="sd-form">
@@ -505,7 +546,9 @@ function PostQuestionSection({ user }) {
             )}
           </div>
           <div className="sd-form-actions">
-            <button type="submit" className="btn btn-primary btn-lg"> Submit Question</button>
+            <button type="submit" className="btn btn-primary btn-lg" disabled={submitting}>
+              {submitting ? "Submitting…" : "Submit Question"}
+            </button>
           </div>
         </form>
       </div>
