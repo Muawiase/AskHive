@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "../supabase";
 
 export default function LoginPage({ onLogin, user }) {
   const navigate = useNavigate();
-  const [role, setRole] = useState("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   if (user) {
     if (user.role === "admin") {
@@ -17,17 +18,28 @@ export default function LoginPage({ onLogin, user }) {
     return null;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-    setTimeout(() => {
-      onLogin(role);
-      if (role === "admin") {
+    setErrorMsg("");
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setErrorMsg(error.message);
+      setSubmitted(false);
+    } else {
+      const userRole = data.user.user_metadata?.role || "student";
+      onLogin(userRole);
+      if (userRole === "admin") {
         navigate("/dashboard/admin");
       } else {
-        navigate(role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
+        navigate(userRole === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
       }
-    }, 800);
+    }
   };
 
   return (
@@ -54,6 +66,12 @@ export default function LoginPage({ onLogin, user }) {
           </p>
         </div>
 
+        {errorMsg && (
+          <div style={{ backgroundColor: "#fee2e2", color: "#b91c1c", padding: "12px", borderRadius: "8px", marginBottom: "16px", fontSize: "14px" }}>
+            {errorMsg}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Email Address</label>
@@ -77,36 +95,6 @@ export default function LoginPage({ onLogin, user }) {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">I am logging in as…</label>
-            <div className="role-selector" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
-              <button
-                type="button"
-                className={`role-btn ${role === "student" ? "active" : ""}`}
-                onClick={() => setRole("student")}
-                style={{ padding: "8px 4px", fontSize: "12px" }}
-              >
-                Student
-              </button>
-              <button
-                type="button"
-                className={`role-btn ${role === "tutor" ? "active" : ""}`}
-                onClick={() => setRole("tutor")}
-                style={{ padding: "8px 4px", fontSize: "12px" }}
-              >
-                Tutor
-              </button>
-              <button
-                type="button"
-                className={`role-btn ${role === "admin" ? "active" : ""}`}
-                onClick={() => setRole("admin")}
-                style={{ padding: "8px 4px", fontSize: "12px" }}
-              >
-                Admin
-              </button>
-            </div>
           </div>
 
           <button
@@ -160,21 +148,6 @@ export default function LoginPage({ onLogin, user }) {
           </Link>
         </div>
 
-        {/* DEMO HINT */}
-        <div
-          style={{
-            marginTop: 24,
-            background: "var(--primary-light)",
-            border: "1.5px solid var(--primary)",
-            borderRadius: "var(--radius-sm)",
-            padding: "14px 16px",
-            fontSize: 13,
-            color: "var(--primary)",
-          }}
-        >
-          <strong> Demo tip:</strong> Select Student or Tutor and click Log In to
-          see different dashboard views. No real credentials needed!
-        </div>
       </div>
     </div>
   );

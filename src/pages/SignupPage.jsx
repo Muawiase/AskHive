@@ -7,7 +7,6 @@ export default function SignupPage({ onLogin, user }) {
   const [role, setRole] = useState("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -38,7 +37,6 @@ export default function SignupPage({ onLogin, user }) {
       password,
       options: {
         data: {
-          full_name: name,
           role: role,
         },
       },
@@ -89,18 +87,6 @@ export default function SignupPage({ onLogin, user }) {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Full Name</label>
-            <input
-              className="form-input"
-              type="text"
-              placeholder="e.g. Amara Kone"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-
           <div className="form-group">
             <label className="form-label">Email Address</label>
             <input
