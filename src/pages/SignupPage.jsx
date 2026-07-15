@@ -39,6 +39,7 @@ export default function SignupPage({ onLogin, user }) {
         data: {
           role: role,
         },
+        emailRedirectTo: `${window.location.origin}/login`,
       },
     });
 
