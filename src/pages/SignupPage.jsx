@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "../supabase";
 
 export default function SignupPage({ onLogin, user }) {
   const navigate = useNavigate();
@@ -8,6 +9,8 @@ export default function SignupPage({ onLogin, user }) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   if (user) {
     if (user.role === "admin") {
@@ -18,17 +21,36 @@ export default function SignupPage({ onLogin, user }) {
     return null;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
     setSubmitted(true);
-    setTimeout(() => {
-      onLogin(role);
-      if (role === "admin") {
-        navigate("/dashboard/admin");
-      } else {
-        navigate(role === "tutor" ? "/dashboard/tutor" : "/dashboard/student");
-      }
-    }, 800);
+
+    if (password.length < 6) {
+      setErrorMsg("Password must be at least 6 characters long.");
+      setSubmitted(false);
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+          role: role,
+        },
+      },
+    });
+
+    if (error) {
+      setErrorMsg(error.message);
+      setSubmitted(false);
+    } else {
+      setSuccessMsg("Account created successfully! Please check your email to verify your account before logging in.");
+      setSubmitted(false); // Enable the button again if needed, though they should verify email
+    }
   };
 
   return (
@@ -53,6 +75,18 @@ export default function SignupPage({ onLogin, user }) {
             Join thousands of learners today.
           </p>
         </div>
+
+        {errorMsg && (
+          <div style={{ backgroundColor: "#fee2e2", color: "#b91c1c", padding: "12px", borderRadius: "8px", marginBottom: "16px", fontSize: "14px" }}>
+            {errorMsg}
+          </div>
+        )}
+
+        {successMsg && (
+          <div style={{ backgroundColor: "#dcfce7", color: "#15803d", padding: "12px", borderRadius: "8px", marginBottom: "16px", fontSize: "14px" }}>
+            {successMsg}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
