@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabase";
 
-export default function SignupPage({ onLogin, user }) {
+export default function SignupPage({ onLogin, user, modal = false }) {
   const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [fullName, setFullName] = useState("");
@@ -55,12 +55,8 @@ export default function SignupPage({ onLogin, user }) {
     }
   };
 
-  return (
-    <div className="login-page" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, var(--bg-main) 0%, rgba(108,99,255,0.05) 100%)" }}>
-      <div style={{ position: "absolute", top: "-10%", left: "-10%", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
-      
-      <div className="login-card glass-panel" style={{ zIndex: 1, border: "1px solid rgba(255,255,255,0.6)", borderRadius: "var(--radius-lg)", background: "rgba(255,255,255,0.85)" }}>
+  const card = (
+    <div className={`login-card glass-panel ${modal ? "login-card-modal" : ""}`} style={modal ? undefined : { zIndex: 1, border: "1px solid rgba(255,255,255,0.6)", borderRadius: "var(--radius-lg)", background: "rgba(255,255,255,0.85)" }}>
         <div className="login-logo">
           <img
             src="/logo.png"
@@ -215,6 +211,15 @@ export default function SignupPage({ onLogin, user }) {
           </Link>
         </div>
       </div>
+  );
+
+  if (modal) return card;
+
+  return (
+    <div className="login-page" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, var(--bg-main) 0%, rgba(76,175,80,0.06) 100%)" }}>
+      <div style={{ position: "absolute", top: "-10%", left: "-10%", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, rgba(56,142,60,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+      {card}
     </div>
   );
 }

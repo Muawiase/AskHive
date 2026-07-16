@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
@@ -12,6 +12,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import GuestModal from "./components/GuestModal";
+import AuthOverlayLayout from "./components/AuthOverlayLayout";
 import { mockUsers } from "./mockData";
 import AboutPage from "./pages/AboutPage";
 import FAQPage from "./pages/FAQPage";
@@ -104,6 +105,9 @@ export default function App() {
     supabase.auth.signOut(); // onAuthStateChange will set user to null
   };
 
+  const location = useLocation();
+  const isAuthOverlay = location.pathname === "/login" || location.pathname === "/signup";
+
 
   const requireAuth = (element) => {
     if (!user) {
@@ -125,8 +129,16 @@ export default function App() {
       )}
       <Routes>
         <Route path="/" element={<LandingPage user={user} />} />
-        <Route path="/login" element={<LoginPage onLogin={login} user={user} />} />
-        <Route path="/signup" element={<SignupPage onLogin={login} user={user} />} />
+        <Route path="/login" element={
+          <AuthOverlayLayout user={user} title="Log in">
+            <LoginPage onLogin={login} user={user} modal />
+          </AuthOverlayLayout>
+        } />
+        <Route path="/signup" element={
+          <AuthOverlayLayout user={user} title="Sign up">
+            <SignupPage onLogin={login} user={user} modal />
+          </AuthOverlayLayout>
+        } />
         <Route
           path="/browse"
           element={<BrowsePage user={user} onGuestAction={() => setShowGuestModal(true)} />}
@@ -169,7 +181,7 @@ export default function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-      <Footer />
+      {!isAuthOverlay && <Footer />}
     </div>
   );
 }

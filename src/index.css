@@ -350,6 +350,75 @@ textarea.form-input { resize: vertical; min-height: 120px; line-height: 1.6; }
 /* ─── LOGIN PAGE ─────────────────────────────────────────────── */
 .login-page { min-height: calc(100vh - 72px); display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
 .login-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 48px 40px; width: 100%; max-width: 460px; }
+.login-card-modal {
+  max-width: 440px;
+  padding: 40px 36px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 24px 64px rgba(27, 94, 32, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  animation: scaleIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── AUTH OVERLAY (login / signup on landing) ─────────────── */
+.auth-overlay-layout {
+  position: relative;
+  min-height: calc(100vh - 72px);
+}
+.auth-bg {
+  position: fixed;
+  inset: 72px 0 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.auth-bg-content {
+  opacity: 0.28;
+  filter: blur(1.5px) saturate(0.85);
+  transform: scale(1.01);
+  transform-origin: top center;
+}
+.auth-overlay-backdrop {
+  position: fixed;
+  inset: 72px 0 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
+}
+.auth-modal-shell {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+}
+.auth-modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-muted);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+.auth-modal-close:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
 .login-logo { text-align: center; margin-bottom: 32px; }
 .login-logo .logo-text { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .auth-toggle { display: flex; background: var(--bg-main); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 32px; gap: 4px; }
@@ -904,6 +973,9 @@ textarea.form-input { resize: vertical; min-height: 120px; line-height: 1.6; }
   .stat-cards { grid-template-columns: repeat(2, 1fr); }
   .steps-grid { grid-template-columns: 1fr; }
   .login-card { padding: 32px 24px; }
+  .login-card-modal { padding: 32px 24px 28px; }
+  .auth-overlay-backdrop { padding: 16px; }
+  .auth-modal-close { top: -8px; right: -4px; }
   .modal-box { padding: 36px 24px; }
   .stats-bar-inner { gap: 32px; }
   .hero-ctas { flex-direction: column; }
