@@ -4,6 +4,45 @@ import { mockTutors } from "../mockData";
 import { supabase } from "../supabase";
 import GuestModal from "../components/GuestModal";
 
+// Allowed MIME types for uploads
+const ALLOWED_TYPES = [
+  'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+  'application/pdf', 'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain', 'application/zip',
+];
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
+
+function isImageType(fileType) {
+  return fileType && fileType.startsWith('image/');
+}
+
+function FileAttachment({ fileUrl, fileName, fileType }) {
+  if (!fileUrl) return null;
+  if (isImageType(fileType)) {
+    return (
+      <div className="chat-file-image-wrap">
+        <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+          <img src={fileUrl} alt={fileName || 'image'} className="chat-file-image" />
+        </a>
+        {fileName && <div className="chat-file-name">{fileName}</div>}
+      </div>
+    );
+  }
+  return (
+    <a
+      href={fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      download={fileName}
+      className="chat-doc-link"
+    >
+      <span className="chat-doc-icon">📎</span>
+      <span className="chat-doc-name">{fileName || 'Download file'}</span>
+    </a>
+  );
+}
+
 
 
 
@@ -24,6 +63,11 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
   const [chatLoading, setChatLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const chatBottomRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0); // 0-100
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
   const fetchBids = async () => {
     setLoadingBids(true);
@@ -104,6 +148,7 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
               );
               if (optimisticIdx !== -1) {
                 const updated = [...prev];
+                // Replace optimistic with real row (includes file_url etc.)
                 updated[optimisticIdx] = payload.new;
                 return updated;
               }
@@ -173,37 +218,110 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
     setSubmittingBid(false);
   };
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadError(null);
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setUploadError('Unsupported file type. Allowed: images (JPG, PNG, GIF, WebP) and documents (PDF, DOC, DOCX, TXT, ZIP).');
+      e.target.value = '';
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setUploadError('File too large. Maximum allowed size is 20 MB.');
+      e.target.value = '';
+      return;
+    }
+    setSelectedFile(file);
+  };
+
+  const clearFile = () => {
+    setSelectedFile(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const sendChat = async () => {
     if (!user) { setShowModal(true); return; }
     const trimmed = chatMsg.trim();
-    if (!trimmed) return;
-    
+    if (!trimmed && !selectedFile) return;
+    if (uploading) return; // prevent duplicate submission
+
+    setUploadError(null);
+    setUploading(true);
+    setUploadProgress(0);
+
+    let fileUrl = null;
+    let fileName = null;
+    let fileType = null;
+
+    // Upload file if one is selected
+    if (selectedFile) {
+      const ext = selectedFile.name.split('.').pop();
+      const filePath = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      try {
+        // Simulate progress start
+        setUploadProgress(10);
+        const { data: uploadData, error: uploadErr } = await supabase.storage
+          .from('chat-files')
+          .upload(filePath, selectedFile, { cacheControl: '3600', upsert: false });
+        if (uploadErr) {
+          setUploadError('Upload failed: ' + uploadErr.message);
+          setUploading(false);
+          setUploadProgress(0);
+          return;
+        }
+        setUploadProgress(80);
+        const { data: urlData } = supabase.storage.from('chat-files').getPublicUrl(filePath);
+        fileUrl = urlData?.publicUrl || null;
+        fileName = selectedFile.name;
+        fileType = selectedFile.type;
+        setUploadProgress(100);
+      } catch (err) {
+        setUploadError('Upload failed: ' + (err.message || 'Unknown error'));
+        setUploading(false);
+        setUploadProgress(0);
+        return;
+      }
+    }
+
     // Clear input optimistically for a snappy feel
-    setChatMsg("");
-    
+    const messageText = trimmed;
+    setChatMsg('');
+    clearFile();
+    setUploadProgress(0);
+
     // Generate temporary ID and message object
     const tempId = `opt-${Date.now()}-${Math.random()}`;
     const optimisticMsg = {
       id: tempId,
       question_id: Number(id),
       sender_id: user.id,
-      message: trimmed,
+      message: messageText,
+      file_url: fileUrl,
+      file_name: fileName,
+      file_type: fileType,
       created_at: new Date().toISOString(),
     };
-    
+
     // Optimistic update
     setChatMessages((prev) => [...prev, optimisticMsg]);
-    
+
     const { error } = await supabase.from('messages').insert({
       question_id: Number(id),
       sender_id: user.id,
-      message: trimmed,
+      message: messageText,
+      file_url: fileUrl,
+      file_name: fileName,
+      file_type: fileType,
     });
-    
+
+    setUploading(false);
+
     if (error) {
-      alert('Failed to send message: ' + error.message);
+      setUploadError('Failed to send message: ' + error.message);
       // Restore text so the user can retry
-      setChatMsg(trimmed);
+      setChatMsg(messageText);
       // Remove the failed optimistic message
       setChatMessages((prev) => prev.filter((m) => m.id !== tempId));
     }
@@ -412,7 +530,14 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                 return (
                   <div key={msg.id ?? i}>
                     <div className={`chat-bubble ${isMine ? 'student' : 'tutor'}`}>
-                      {msg.message}
+                      {msg.message && <div className="chat-text">{msg.message}</div>}
+                      {msg.file_url && (
+                        <FileAttachment
+                          fileUrl={msg.file_url}
+                          fileName={msg.file_name}
+                          fileType={msg.file_type}
+                        />
+                      )}
                       <div className="chat-meta">{formattedTime}</div>
                     </div>
                   </div>
@@ -423,17 +548,65 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
             {/* Invisible anchor for auto-scroll */}
             <div ref={chatBottomRef} />
 
+            {/* File preview chip */}
+            {selectedFile && (
+              <div className="chat-file-preview">
+                <span className="chat-file-preview-icon">
+                  {isImageType(selectedFile.type) ? '🖼️' : '📄'}
+                </span>
+                <span className="chat-file-preview-name">{selectedFile.name}</span>
+                <button
+                  className="chat-file-preview-remove"
+                  onClick={clearFile}
+                  title="Remove file"
+                  disabled={uploading}
+                >✕</button>
+              </div>
+            )}
+
+            {/* Upload progress bar */}
+            {uploading && uploadProgress > 0 && uploadProgress < 100 && (
+              <div className="chat-upload-progress">
+                <div className="chat-upload-bar" style={{ width: `${uploadProgress}%` }} />
+                <span className="chat-upload-label">Uploading… {uploadProgress}%</span>
+              </div>
+            )}
+
+            {/* Error message */}
+            {uploadError && (
+              <div className="chat-upload-error">{uploadError}</div>
+            )}
+
             <div className="chat-input-row">
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/zip"
+                style={{ display: 'none' }}
+                onChange={handleFileSelect}
+                disabled={!user || uploading}
+              />
+              {/* Attachment button */}
+              <button
+                className="chat-attach-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={!user || uploading}
+                title="Attach file or image"
+                type="button"
+              >
+                📎
+              </button>
               <input
                 type="text"
                 placeholder={user ? "Type a reply…" : "Sign in to join the discussion"}
                 value={chatMsg}
                 onChange={(e) => setChatMsg(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendChat()}
-                disabled={!user}
+                disabled={!user || uploading}
               />
-              <button onClick={sendChat} disabled={!user}>
-                Send →
+              <button onClick={sendChat} disabled={!user || uploading || (!chatMsg.trim() && !selectedFile)}>
+                {uploading ? '…' : 'Send →'}
               </button>
             </div>
             {!user && (
