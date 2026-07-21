@@ -97,7 +97,7 @@ export default function Navbar({ user, onLogout }) {
             minWidth: "44px",
             minHeight: "44px",
             alignItems: "center",
-            justify-content: "center"
+            justifyContent: "center"
           }}
           aria-label="Toggle navigation menu"
           aria-expanded={mobileOpen}
