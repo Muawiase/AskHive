@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { mockTutors } from "../mockData";
 import { supabase } from "../supabase";
 import { QuestionCard } from "../components/Cards";
 
@@ -22,42 +21,67 @@ const howSteps = [
   },
 ];
 
-const subjects = [
-  { label: "Maths" },
-  { label: "Physics" },
-  { label: "Biology" },
-  { label: "Chemistry" },
-  { label: "Coding" },
-  { label: "Languages" },
-  { label: "History" },
-  { label: "Economics" },
-  { label: "Literature" },
-  { label: "Writing" },
-];
-
 export default function LandingPage({ user }) {
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subjects, setSubjects] = useState([]);
+  const [stats, setStats] = useState({
+    totalQuestions: 0,
+    freeQuestions: 0,
+    paidQuestions: 0,
+    totalMessages: 0,
+  });
 
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from("questions").select("*").order('created_at', { ascending: false }).limit(3);
-      if (!error && data) {
-        const mapped = data.map(q => ({
+
+      // Fetch real questions from Supabase
+      const { data: qData } = await supabase
+        .from("questions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (qData) {
+        const mapped = qData.slice(0, 3).map((q) => ({
           ...q,
           isPaid: q.payment !== null && q.payment > 0,
           pricePerHour: q.payment || 0,
-          status: 'open',
+          status: "open",
           responses: 0,
           postedAt: q.created_at,
-          urgency: 'medium',
+          urgency: "medium",
         }));
         setFeatured(mapped);
+
+        // Compute real stats from database records
+        const total = qData.length;
+        const freeCount = qData.filter((q) => !q.payment || q.payment <= 0).length;
+        const paidCount = qData.filter((q) => q.payment && q.payment > 0).length;
+
+        // Fetch real messages count
+        const { count: msgCount } = await supabase
+          .from("messages")
+          .select("*", { count: "exact", head: true });
+
+        setStats({
+          totalQuestions: total,
+          freeQuestions: freeCount,
+          paidQuestions: paidCount,
+          totalMessages: msgCount || 0,
+        });
       }
+
+      // Fetch real subjects from Supabase
+      const { data: sData } = await supabase.from("subjects").select("name");
+      if (sData && sData.length > 0) {
+        setSubjects(sData.map((s) => ({ label: s.name })));
+      }
+
       setLoading(false);
     };
-    fetchQuestions();
+
+    fetchData();
   }, []);
 
   return (
@@ -116,15 +140,15 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/*  STATS BAR  */}
+      {/*  REAL STATS BAR  */}
       <div className="stats-bar">
         <div className="container">
           <div className="stats-bar-inner">
             {[
-              { num: "12,400+", lbl: "Questions answered" },
-              { num: "3,200+", lbl: "Active helpers" },
-              { num: "4,800+", lbl: "Free sessions given" },
-              { num: "4.8 ", lbl: "Average tutor rating" },
+              { num: stats.totalQuestions.toString(), lbl: "Questions posted" },
+              { num: stats.freeQuestions.toString(), lbl: "Free help requests" },
+              { num: stats.paidQuestions.toString(), lbl: "Paid tutoring requests" },
+              { num: stats.totalMessages.toString(), lbl: "Messages & answers" },
             ].map((s) => (
               <div className="stat-item" key={s.lbl}>
                 <div className="stat-item-num">{s.num}</div>
@@ -135,56 +159,58 @@ export default function LandingPage({ user }) {
         </div>
       </div>
 
-      {/*  SUBJECT ICONS  */}
-      <section style={{ padding: "60px 0", background: "var(--bg-main)" }}>
-        <div className="container">
-          <h2 className="section-title">Every subject. Every level.</h2>
-          <p className="section-sub">
-            High school, university, adult learning, self-study — everyone's welcome.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 16,
-              flexWrap: "wrap",
-              maxWidth: 700,
-              margin: "0 auto",
-            }}
-          >
-            {subjects.map((s) => (
-              <div
-                key={s.label}
-                style={{
-                  background: "white",
-                  border: "1.5px solid var(--border)",
-                  borderRadius: "var(--radius-sm)",
-                  padding: "14px 20px",
-                  textAlign: "center",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                  boxShadow: "var(--shadow-sm)",
-                  minWidth: 90,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--primary)";
-                  e.currentTarget.style.background = "var(--primary-light)";
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.background = "white";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
-                  {s.label}
+      {/*  REAL SUBJECTS FROM DATABASE  */}
+      {subjects.length > 0 && (
+        <section style={{ padding: "60px 0", background: "var(--bg-main)" }}>
+          <div className="container">
+            <h2 className="section-title">Every subject. Every level.</h2>
+            <p className="section-sub">
+              High school, university, adult learning, self-study — everyone's welcome.
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 16,
+                flexWrap: "wrap",
+                maxWidth: 700,
+                margin: "0 auto",
+              }}
+            >
+              {subjects.map((s) => (
+                <div
+                  key={s.label}
+                  style={{
+                    background: "white",
+                    border: "1.5px solid var(--border)",
+                    borderRadius: "var(--radius-sm)",
+                    padding: "14px 20px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    boxShadow: "var(--shadow-sm)",
+                    minWidth: 90,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--primary)";
+                    e.currentTarget.style.background = "var(--primary-light)";
+                    e.currentTarget.style.transform = "translateY(-3px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.background = "white";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
+                    {s.label}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/*  HOW IT WORKS  */}
       <section className="how-section" style={{ background: "white" }}>
@@ -226,7 +252,7 @@ export default function LandingPage({ user }) {
                   Set an hourly rate you're comfortable paying and get matched with
                   verified tutors who bring professional-level knowledge and experience.
                 </p>
-                <span className="badge badge-paid" style={{ fontSize: 14, padding: "6px 16px" }}>$15–25/hr</span>
+                <span className="badge badge-paid" style={{ fontSize: 14, padding: "6px 16px" }}>Paid Rate</span>
               </div>
             </div>
           </div>
@@ -265,37 +291,12 @@ export default function LandingPage({ user }) {
         </div>
       </section>
 
-      {/*  SOCIAL PROOF  */}
-      <section style={{ background: "var(--bg-main)", padding: "80px 0" }}>
-        <div className="container">
-          <h2 className="section-title">What learners say</h2>
-          <p className="section-sub">Real stories from the JONNE community.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-            {[
-              { text: "I was panicking about my physics exam and posted at midnight. By 8am I had 3 tutors offering help. Ended up passing with flying colours.", author: "Priya S. — Grade 12", avatar: "PS" },
-              { text: "I'm 34 and going back to study economics after years away. JONNE makes me feel like I'm not alone — no judgment, just help.", author: "Rachel T. — Adult Learner", avatar: "RT" },
-              { text: "As a tutor, I love that I can choose to help for free sometimes. The impact counter is a nice touch — I've helped 45 students!", author: "Ayaan P. — Peer Helper", avatar: "AP" },
-            ].map((r, i) => (
-              <div className="card" key={i}>
-                <div className="card-inner">
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "var(--primary-light)", color: "var(--primary)", width: "36px", height: "36px", borderRadius: "50%", fontSize: "13px", fontWeight: 700, marginBottom: 14 }}>{r.avatar}</div>
-                  <p style={{ color: "var(--text-secondary)", fontStyle: "italic", lineHeight: 1.7, marginBottom: 16, fontSize: 14 }}>
-                    "{r.text}"
-                  </p>
-                  <div style={{ fontWeight: 700, fontSize: 13 }}>{r.author}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/*  FINAL CTA  */}
       <section className="landing-cta">
         <div className="container">
           <h2 style={{ fontSize: 36, fontWeight: 900, marginBottom: 16 }}>Ready to stop being stuck?</h2>
           <p style={{ opacity: 0.88, fontSize: 18, marginBottom: 40, maxWidth: 480, margin: "0 auto 40px" }}>
-            Join thousands of learners who've already found their spark with JONNE.
+            Join learners who've already found their spark with JONNE.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/signup" className="btn btn-lg" style={{ background: "white", color: "var(--primary)", fontWeight: 700 }}>
@@ -311,3 +312,4 @@ export default function LandingPage({ user }) {
     </div>
   );
 }
+
