@@ -113,6 +113,19 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
   const [paymentError, setPaymentError]             = useState("");
   const [paymentSuccess, setPaymentSuccess]         = useState(false);
 
+  // ── payment simulation states ──
+  const [paymentStep, setPaymentStep]               = useState("SELECT"); // SELECT, DETAILS, PROCESSING, VERIFY, RESULT
+  const [paymentPhone, setPaymentPhone]             = useState("");
+  const [paymentPin, setPaymentPin]                 = useState("");
+  const [cardName, setCardName]                     = useState("");
+  const [cardNumber, setCardNumber]                 = useState("");
+  const [cardExpiry, setCardExpiry]                 = useState("");
+  const [cardCvv, setCardCvv]                       = useState("");
+  const [otpCode, setOtpCode]                       = useState("");
+  const [simulatedOutcome, setSimulatedOutcome]     = useState(null);
+  const [simulatedTxDetails, setSimulatedTxDetails] = useState(null);
+  const [processingMessage, setProcessingMessage]   = useState("Processing payment...");
+
   // ── chat ──
   const [chatMsg, setChatMsg]           = useState("");
   const [chatMessages, setChatMessages] = useState([]);
@@ -279,23 +292,157 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
     });
   };
 
-  const handlePay = async () => {
-    setInitiatingPayment(true);
+  // ─── PAYMENT SIMULATION LOGIC ───
+  const handleCardNumberChange = (e) => {
+    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    let formatted = '';
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formatted += ' ';
+      }
+      formatted += value[i];
+    }
+    setCardNumber(formatted.substring(0, 19));
+  };
+
+  const handleCardExpiryChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    if (value.length > 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    setCardExpiry(value.substring(0, 5));
+  };
+
+  const handleCardCvvChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    setCardCvv(value.substring(0, 3));
+  };
+
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/[^0-9+\s]/g, '');
+    setPaymentPhone(value.substring(0, 15));
+  };
+
+  const handlePinChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    setPaymentPin(value.substring(0, 4));
+  };
+
+  const handleOtpChange = (e) => {
+    let value = e.target.value.replace(/[^0-9]/g, '');
+    setOtpCode(value.substring(0, 6));
+  };
+
+  const handleDetailsSubmit = (e) => {
+    e.preventDefault();
     setPaymentError("");
-    
+
+    if (paymentMethod === "CARD") {
+      if (!cardName.trim()) {
+        setPaymentError("Cardholder name is required.");
+        return;
+      }
+      if (cardNumber.replace(/\s+/g, '').length !== 16) {
+        setPaymentError("Card number must be 16 digits.");
+        return;
+      }
+      if (cardExpiry.length !== 5 || !cardExpiry.includes('/')) {
+        setPaymentError("Card expiry must be in MM/YY format.");
+        return;
+      }
+      if (cardCvv.length !== 3) {
+        setPaymentError("CVV must be 3 digits.");
+        return;
+      }
+    } else {
+      const purePhone = paymentPhone.replace(/\s+/g, '');
+      if (!paymentPhone.trim()) {
+        setPaymentError("Phone number is required.");
+        return;
+      }
+      if (purePhone.length < 9 || purePhone.length > 15) {
+        setPaymentError("Please enter a valid phone number (9 to 15 digits).");
+        return;
+      }
+    }
+
+    setPaymentStep("PROCESSING");
+    setInitiatingPayment(true);
+    setProcessingMessage("Initiating secure connection...");
+
+    setTimeout(() => {
+      setProcessingMessage(paymentMethod === "CARD" 
+        ? "Verifying card details with issuing bank..." 
+        : "Requesting MTN Mobile Money transaction prompt..."
+      );
+    }, 1200);
+
+    setTimeout(() => {
+      setProcessingMessage("Securing transaction tunnel...");
+    }, 2400);
+
+    setTimeout(() => {
+      setInitiatingPayment(false);
+      setPaymentStep("VERIFY");
+    }, 3500);
+  };
+
+  const triggerOutcome = async () => {
     const acceptedBid = bids.find(b => b.accepted);
     if (!acceptedBid) {
       setPaymentError("No accepted bid found.");
-      setInitiatingPayment(false);
       return;
     }
 
-    const txRef = `tx-mock-${id}-${acceptedBid.tutor_id}-${Date.now()}`;
+    // Choose randomly, but weight SUCCESS at 60%
+    const rand = Math.random();
+    let selected = "SUCCESS";
+    if (rand >= 0.6) {
+      let availableFailures = [
+        "FAILED", 
+        "CANCELLED", 
+        "INSUFFICIENT_BALANCE", 
+        "TIMEOUT", 
+        "DECLINED"
+      ];
+      if (paymentMethod === "CARD") {
+        availableFailures.push("INVALID_CARD");
+      } else {
+        availableFailures.push("PIN_INCORRECT");
+      }
+      
+      const randomIndex = Math.floor(Math.random() * availableFailures.length);
+      selected = availableFailures[randomIndex];
+    }
 
-    // Simulate network delay for the payment gateway
-    setTimeout(async () => {
+    setSimulatedOutcome(selected);
+
+    const amountStr = paymentMethod === 'MTN' 
+      ? `UGX ${(acceptedBid.bid_price * 3700).toLocaleString()}` 
+      : `USD ${Number(acceptedBid.bid_price).toFixed(2)}`;
+
+    const dateStr = new Date().toLocaleString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const txRef = `TXN-${new Date().toISOString().slice(0,10).replace(/-/g, '')}-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const details = {
+      txRef,
+      amount: amountStr,
+      method: paymentMethod === 'MTN' ? 'MTN Mobile Money' : 'Visa/Mastercard',
+      date: dateStr,
+      status: selected === "SUCCESS" ? "Completed" : "Failed"
+    };
+
+    setSimulatedTxDetails(details);
+
+    if (selected === "SUCCESS") {
       try {
-        // Save mock payment record to database
         const { data: newPayment, error: insertErr } = await supabase
           .from('payments')
           .insert({
@@ -314,7 +461,6 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           throw new Error("Payment saved but UI update failed: " + insertErr.message);
         }
         
-        // Update question status to 'in-progress'
         const { error: updateErr } = await supabase
           .from('questions')
           .update({ status: 'in-progress' })
@@ -324,20 +470,47 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           console.error("Supabase update error:", updateErr);
         }
         
-        // Update local state
         if (newPayment && newPayment.length > 0) {
           setPayments(prev => [...(prev || []), newPayment[0]]);
         }
         setQuestion(prev => prev ? { ...prev, status: 'in-progress' } : null);
         setPaymentSuccess(true);
-        setShowPaymentModal(false);
-        setPaymentError("");
       } catch (err) {
         setPaymentError(err.message || "Failed to process simulated payment on our servers.");
-      } finally {
-        setInitiatingPayment(false);
+        setSimulatedOutcome("FAILED");
       }
-    }, 1500);
+    }
+  };
+
+  const handleVerifySubmit = (e) => {
+    e.preventDefault();
+    setPaymentError("");
+
+    if (paymentMethod === "CARD") {
+      if (otpCode.length !== 6) {
+        setPaymentError("Please enter a valid 6-digit OTP code.");
+        return;
+      }
+    } else {
+      if (paymentPin.length !== 4) {
+        setPaymentError("Please enter a valid 4-digit PIN.");
+        return;
+      }
+    }
+
+    setPaymentStep("PROCESSING");
+    setInitiatingPayment(true);
+    setProcessingMessage("Validating authentication credentials...");
+
+    setTimeout(() => {
+      setProcessingMessage("Finalizing transaction settlement...");
+    }, 1200);
+
+    setTimeout(async () => {
+      await triggerOutcome();
+      setInitiatingPayment(false);
+      setPaymentStep("RESULT");
+    }, 2500);
   };
 
 
@@ -717,6 +890,16 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
                             onClick={() => {
                               setPaymentError("");
                               setPaymentSuccess(false);
+                              setPaymentStep("SELECT");
+                              setPaymentPhone("");
+                              setPaymentPin("");
+                              setCardName("");
+                              setCardNumber("");
+                              setCardExpiry("");
+                              setCardCvv("");
+                              setOtpCode("");
+                              setSimulatedOutcome(null);
+                              setSimulatedTxDetails(null);
                               setShowPaymentModal(true);
                             }}
                           >
@@ -1061,115 +1244,660 @@ export default function QuestionDetailPage({ user, onGuestAction }) {
           left: 0,
           right: 0,
           bottom: 0,
-          background: "rgba(0,0,0,0.5)",
+          background: "rgba(15, 23, 42, 0.6)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 9999,
-          backdropFilter: "blur(4px)"
+          backdropFilter: "blur(8px)"
         }}>
-          <div className="card" style={{
-            width: "90%",
-            maxWidth: 420,
-            padding: 24,
-            background: "white",
-            borderRadius: "var(--radius-md)",
-            boxShadow: "var(--shadow-lg)",
-            boxSizing: "border-box"
-          }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Select Payment Method</h3>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 20 }}>
-              Choose how you want to pay the tutoring fee of <strong>${acceptedBid.bid_price}</strong>.
-            </p>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
-              <label style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                padding: 14,
-                border: `2px solid ${paymentMethod === 'MTN' ? 'var(--primary)' : 'var(--border)'}`,
-                borderRadius: "var(--radius-sm)",
-                cursor: "pointer",
-                background: paymentMethod === 'MTN' ? 'var(--primary-light)' : 'transparent',
-                transition: "all 0.2s"
-              }}>
-                <input
-                  type="radio"
-                  name="payment_method"
-                  checked={paymentMethod === 'MTN'}
-                  onChange={() => setPaymentMethod('MTN')}
-                  style={{ accentColor: "var(--primary)" }}
-                />
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>MTN Mobile Money</div>
-                  <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 2 }}>
-                    Pay using MTN wallet (UGX {(acceptedBid.bid_price * 3700).toLocaleString()})
-                  </div>
-                </div>
-              </label>
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            @keyframes scaleIn {
+              0% { transform: scale(0.9); opacity: 0; }
+              100% { transform: scale(1); opacity: 1; }
+            }
+            @keyframes drawCheck {
+              to { stroke-dashoffset: 0; }
+            }
+            .payment-modal-card {
+              animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              background: white;
+              border-radius: 16px;
+              width: 90%;
+              max-width: 440px;
+              box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+              border: 1px solid rgba(226, 232, 240, 0.8);
+              overflow: hidden;
+              display: flex;
+              flex-direction: column;
+            }
+            .payment-step-indicator {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 0 16px;
+              margin-bottom: 24px;
+            }
+            .step-dot {
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 12px;
+              font-weight: 700;
+              transition: all 0.3s;
+            }
+            .step-dot.active {
+              background: var(--primary);
+              color: white;
+              box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            }
+            .step-dot.pending {
+              background: #f1f5f9;
+              color: #94a3b8;
+              border: 1px solid #e2e8f0;
+            }
+            .step-line {
+              flex: 1;
+              height: 2px;
+              background: #e2e8f0;
+              margin: 0 8px;
+            }
+            .step-line.active {
+              background: var(--primary);
+            }
+            .payment-input-group {
+              margin-bottom: 16px;
+            }
+            .payment-input-group label {
+              display: block;
+              font-size: 13px;
+              font-weight: 600;
+              color: #334155;
+              margin-bottom: 6px;
+            }
+            .payment-input-field {
+              width: 100%;
+              padding: 10px 14px;
+              border: 1px solid #cbd5e1;
+              border-radius: 8px;
+              font-size: 14px;
+              color: #1e293b;
+              box-sizing: border-box;
+              transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            .payment-input-field:focus {
+              outline: none;
+              border-color: var(--primary);
+              box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+            }
+            .receipt-row {
+              display: flex;
+              justify-content: space-between;
+              padding: 8px 0;
+              border-bottom: 1px dashed #f1f5f9;
+              font-size: 13.5px;
+            }
+            .receipt-row:last-child {
+              border-bottom: none;
+            }
+          `}</style>
 
-              <label style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                padding: 14,
-                border: `2px solid ${paymentMethod === 'CARD' ? 'var(--primary)' : 'var(--border)'}`,
-                borderRadius: "var(--radius-sm)",
-                cursor: "pointer",
-                background: paymentMethod === 'CARD' ? 'var(--primary-light)' : 'transparent',
-                transition: "all 0.2s"
-              }}>
-                <input
-                  type="radio"
-                  name="payment_method"
-                  checked={paymentMethod === 'CARD'}
-                  onChange={() => setPaymentMethod('CARD')}
-                  style={{ accentColor: "var(--primary)" }}
-                />
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>Visa / Mastercard</div>
-                  <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 2 }}>
-                    Pay securely with credit or debit card (USD {acceptedBid.bid_price})
-                  </div>
-                </div>
-              </label>
+          <div className="payment-modal-card">
+            {/* Top Security Banner */}
+            <div style={{
+              background: "#f8fafc",
+              padding: "12px 20px",
+              borderBottom: "1px solid #f1f5f9",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#475569" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.5px", textTransform: "uppercase" }}>Secure Payment Gateway</span>
+              </div>
+              {!initiatingPayment && paymentStep !== "RESULT" && (
+                <button 
+                  onClick={() => {
+                    setShowPaymentModal(false);
+                    setPaymentError("");
+                  }} 
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "#94a3b8", padding: 4 }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              )}
             </div>
 
-            {paymentError && (
-              <div style={{
-                color: "#c62828",
-                fontSize: 13,
-                marginBottom: 16,
-                padding: "10px 14px",
-                background: "#ffebee",
-                border: "1px solid #ef9a9a",
-                borderRadius: "var(--radius-sm)",
-                textAlign: "left",
-                lineHeight: 1.4
-              }}>
-                <strong>Error: </strong> {paymentError}
+            {/* Merchant / Product Info */}
+            <div style={{ padding: "20px 24px 12px", textAlign: "center", borderBottom: "1px solid #f1f5f9" }}>
+              <div style={{ fontSize: 13, color: "#64748b", fontWeight: 600 }}>PAYMENT TO JONNE TUTOR</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "#0f172a", marginTop: 4, display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
+                {paymentMethod === "MTN" ? "UGX " : "$"}
+                {paymentMethod === "MTN" 
+                  ? (acceptedBid.bid_price * 3700).toLocaleString() 
+                  : Number(acceptedBid.bid_price).toFixed(2)
+                }
+              </div>
+              <div style={{ fontSize: 13, color: "#475569", marginTop: 6, fontWeight: 500 }}>
+                For helper: <strong>{acceptedBid.tutor_name}</strong>
+              </div>
+            </div>
+
+            {/* Step Indicators */}
+            {paymentStep !== "RESULT" && paymentStep !== "PROCESSING" && (
+              <div style={{ padding: "20px 24px 0" }}>
+                <div className="payment-step-indicator">
+                  <div className={`step-dot active`}>1</div>
+                  <div className={`step-line ${paymentStep !== "SELECT" ? "active" : ""}`} />
+                  <div className={`step-dot ${paymentStep !== "SELECT" ? "active" : "pending"}`}>2</div>
+                  <div className={`step-line ${paymentStep === "VERIFY" ? "active" : ""}`} />
+                  <div className={`step-dot ${paymentStep === "VERIFY" ? "active" : "pending"}`}>3</div>
+                </div>
               </div>
             )}
 
-            <div style={{ display: "flex", gap: 12, justifyContent: "flex-end" }}>
-              <button
-                className="btn btn-secondary"
-                onClick={() => {
-                  setShowPaymentModal(false);
-                  setPaymentError("");
-                }}
-                disabled={initiatingPayment}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={handlePay}
-                disabled={initiatingPayment || !paymentMethod}
-              >
-                {initiatingPayment ? "Processing..." : "Proceed to Pay"}
-              </button>
+            {/* Content Body */}
+            <div style={{ padding: "12px 24px 24px" }}>
+              
+              {/* STEP 1: SELECT METHOD */}
+              {paymentStep === "SELECT" && (
+                <div>
+                  <h4 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: "#1e293b" }}>Select payment method</h4>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                    <div 
+                      onClick={() => setPaymentMethod("CARD")}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: 16,
+                        border: `2px solid ${paymentMethod === 'CARD' ? 'var(--primary)' : '#e2e8f0'}`,
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        background: paymentMethod === 'CARD' ? 'var(--primary-light)' : 'transparent',
+                        transition: "all 0.2s"
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={paymentMethod === 'CARD' ? 'var(--primary)' : '#64748b'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: 14, color: paymentMethod === 'CARD' ? 'var(--primary)' : '#1e293b' }}>Visa / Mastercard</div>
+                          <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>Pay with Credit or Debit card</div>
+                        </div>
+                      </div>
+                      <div style={{
+                        width: 18,
+                        height: 18,
+                        borderRadius: "50%",
+                        border: `2px solid ${paymentMethod === 'CARD' ? 'var(--primary)' : '#cbd5e1'}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        {paymentMethod === 'CARD' && <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--primary)" }} />}
+                      </div>
+                    </div>
+
+                    <div 
+                      onClick={() => setPaymentMethod("MTN")}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: 16,
+                        border: `2px solid ${paymentMethod === 'MTN' ? 'var(--primary)' : '#e2e8f0'}`,
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        background: paymentMethod === 'MTN' ? 'var(--primary-light)' : 'transparent',
+                        transition: "all 0.2s"
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 6,
+                          background: "#F2C94C",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: 10,
+                          fontWeight: 900,
+                          color: "black"
+                        }}>MTN</div>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: 14, color: paymentMethod === 'MTN' ? 'var(--primary)' : '#1e293b' }}>MTN Mobile Money</div>
+                          <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>Pay using MTN Wallet (Uganda)</div>
+                        </div>
+                      </div>
+                      <div style={{
+                        width: 18,
+                        height: 18,
+                        borderRadius: "50%",
+                        border: `2px solid ${paymentMethod === 'MTN' ? 'var(--primary)' : '#cbd5e1'}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}>
+                        {paymentMethod === 'MTN' && <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--primary)" }} />}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button 
+                    className="btn btn-primary" 
+                    style={{ width: "100%", justifyContent: "center", padding: "12px 0", borderRadius: 10 }}
+                    onClick={() => setPaymentStep("DETAILS")}
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
+
+              {/* STEP 2: DETAILS */}
+              {paymentStep === "DETAILS" && (
+                <form onSubmit={handleDetailsSubmit}>
+                  <h4 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: "#1e293b" }}>Enter payment details</h4>
+                  
+                  {paymentError && (
+                    <div style={{
+                      color: "#c62828",
+                      fontSize: 13,
+                      marginBottom: 16,
+                      padding: "10px 14px",
+                      background: "#ffebee",
+                      border: "1px solid #ef9a9a",
+                      borderRadius: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8
+                    }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      <span>{paymentError}</span>
+                    </div>
+                  )}
+
+                  {paymentMethod === "CARD" ? (
+                    <div>
+                      <div className="payment-input-group">
+                        <label>Cardholder Name</label>
+                        <input 
+                          type="text" 
+                          className="payment-input-field" 
+                          placeholder="e.g. John Doe"
+                          value={cardName}
+                          onChange={(e) => setCardName(e.target.value)}
+                        />
+                      </div>
+                      <div className="payment-input-group">
+                        <label>Card Number</label>
+                        <div style={{ position: "relative" }}>
+                          <input 
+                            type="text" 
+                            className="payment-input-field" 
+                            placeholder="4111 2222 3333 4444"
+                            value={cardNumber}
+                            onChange={handleCardNumberChange}
+                            style={{ paddingRight: 40 }}
+                          />
+                          <div style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", color: "#94a3b8" }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", gap: 12 }}>
+                        <div className="payment-input-group" style={{ flex: 1 }}>
+                          <label>Expiry Date</label>
+                          <input 
+                            type="text" 
+                            className="payment-input-field" 
+                            placeholder="MM/YY"
+                            value={cardExpiry}
+                            onChange={handleCardExpiryChange}
+                          />
+                        </div>
+                        <div className="payment-input-group" style={{ flex: 1 }}>
+                          <label>CVV</label>
+                          <input 
+                            type="password" 
+                            className="payment-input-field" 
+                            placeholder="123"
+                            value={cardCvv}
+                            onChange={handleCardCvvChange}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="payment-input-group">
+                        <label>MTN Phone Number</label>
+                        <div style={{ position: "relative" }}>
+                          <input 
+                            type="text" 
+                            className="payment-input-field" 
+                            placeholder="0771 234 567"
+                            value={paymentPhone}
+                            onChange={handlePhoneChange}
+                            style={{ paddingLeft: 60 }}
+                          />
+                          <div style={{
+                            position: "absolute",
+                            left: 12,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            fontSize: 14,
+                            fontWeight: 700,
+                            color: "#64748b"
+                          }}>+256</div>
+                        </div>
+                        <div style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>
+                          Enter your active mobile money phone number to receive authorization prompt.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+                    <button 
+                      type="button"
+                      className="btn btn-secondary" 
+                      style={{ flex: 1, justifyContent: "center", borderRadius: 10 }}
+                      onClick={() => setPaymentStep("SELECT")}
+                    >
+                      Back
+                    </button>
+                    <button 
+                      type="submit"
+                      className="btn btn-primary" 
+                      style={{ flex: 2, justifyContent: "center", borderRadius: 10 }}
+                    >
+                      Pay Now
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* STEP 3: PROCESSING */}
+              {paymentStep === "PROCESSING" && (
+                <div style={{ textAlign: "center", padding: "24px 0" }}>
+                  <div style={{
+                    width: 60,
+                    height: 60,
+                    border: "4px solid rgba(99, 102, 241, 0.15)",
+                    borderTop: "4px solid var(--primary)",
+                    borderRadius: "50%",
+                    margin: "0 auto 24px",
+                    animation: "spin 1s linear infinite"
+                  }} />
+                  <h4 className="pulse-indicator" style={{ fontSize: 16, fontWeight: 700, color: "#1e293b", margin: "0 0 8px" }}>
+                    {processingMessage}
+                  </h4>
+                  <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>
+                    Please do not close this modal or refresh the page.
+                  </p>
+                </div>
+              )}
+
+              {/* STEP 4: VERIFY */}
+              {paymentStep === "VERIFY" && (
+                <form onSubmit={handleVerifySubmit}>
+                  <h4 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: "#1e293b" }}>
+                    {paymentMethod === "CARD" ? "3D Secure Authentication" : "Mobile Wallet PIN Prompt"}
+                  </h4>
+                  
+                  {paymentError && (
+                    <div style={{
+                      color: "#c62828",
+                      fontSize: 13,
+                      marginBottom: 16,
+                      padding: "10px 14px",
+                      background: "#ffebee",
+                      border: "1px solid #ef9a9a",
+                      borderRadius: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8
+                    }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      <span>{paymentError}</span>
+                    </div>
+                  )}
+
+                  {paymentMethod === "CARD" ? (
+                    <div>
+                      <p style={{ fontSize: 13.5, color: "#475569", lineHeight: 1.5, marginBottom: 16 }}>
+                        We have sent a verification code to the mobile number registered with your card. Enter the 6-digit OTP code below to authorize this transaction.
+                      </p>
+                      <div className="payment-input-group">
+                        <label>One-Time Password (OTP)</label>
+                        <input 
+                          type="text" 
+                          className="payment-input-field" 
+                          placeholder="e.g. 123456"
+                          value={otpCode}
+                          onChange={handleOtpChange}
+                          style={{ textAlign: "center", letterSpacing: "4px", fontSize: 18, fontWeight: 700 }}
+                          maxLength={6}
+                        />
+                      </div>
+                      <div style={{ textAlign: "center", marginBottom: 16 }}>
+                        <span 
+                          style={{ fontSize: 12, color: "var(--primary)", cursor: "pointer", fontWeight: 600 }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            alert("OTP Resent!");
+                          }}
+                        >
+                          Resend Code
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ fontSize: 13.5, color: "#475569", lineHeight: 1.5, marginBottom: 16 }}>
+                        A push request has been sent to <strong>+256 {paymentPhone}</strong>. Please confirm the request on your phone by entering your PIN, or input your 4-digit PIN below to settle the charge directly.
+                      </p>
+                      <div className="payment-input-group">
+                        <label>4-Digit MoMo PIN</label>
+                        <input 
+                          type="password" 
+                          className="payment-input-field" 
+                          placeholder="••••"
+                          value={paymentPin}
+                          onChange={handlePinChange}
+                          style={{ textAlign: "center", letterSpacing: "8px", fontSize: 20 }}
+                          maxLength={4}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+                    <button 
+                      type="button"
+                      className="btn btn-secondary" 
+                      style={{ flex: 1, justifyContent: "center", borderRadius: 10 }}
+                      onClick={() => {
+                        setSimulatedOutcome("CANCELLED");
+                        const amountStr = paymentMethod === 'MTN' 
+                          ? `UGX ${(acceptedBid.bid_price * 3700).toLocaleString()}` 
+                          : `USD ${Number(acceptedBid.bid_price).toFixed(2)}`;
+                        const dateStr = new Date().toLocaleString("en-GB", {
+                          day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+                        });
+                        setSimulatedTxDetails({
+                          txRef: `TXN-${new Date().toISOString().slice(0,10).replace(/-/g, '')}-${Math.floor(100000 + Math.random() * 900000)}`,
+                          amount: amountStr,
+                          method: paymentMethod === 'MTN' ? 'MTN Mobile Money' : 'Visa/Mastercard',
+                          date: dateStr,
+                          status: "Cancelled"
+                        });
+                        setPaymentStep("RESULT");
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit"
+                      className="btn btn-primary" 
+                      style={{ flex: 2, justifyContent: "center", borderRadius: 10 }}
+                    >
+                      Verify & Pay
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* STEP 5: RESULT */}
+              {paymentStep === "RESULT" && simulatedOutcome && simulatedTxDetails && (
+                <div style={{ textAlign: "center" }}>
+                  
+                  {simulatedOutcome === "SUCCESS" ? (
+                    <div>
+                      <svg className="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" style={{ width: 64, height: 64, color: "#2e7d32", display: "block", margin: "0 auto 16px" }}>
+                        <circle cx="26" cy="26" r="25" fill="none" stroke="currentColor" strokeWidth="3" style={{ strokeDasharray: 157, strokeDashoffset: 157, animation: "drawCheck 0.5s ease-in-out 0.1s forwards" }}/>
+                        <path fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" d="M14 27l8 8 16-16" style={{ strokeDasharray: 48, strokeDashoffset: 48, animation: "drawCheck 0.3s ease-in-out 0.6s forwards" }}/>
+                      </svg>
+                      <h4 style={{ fontSize: 18, fontWeight: 800, color: "#2e7d32", margin: "0 0 6px" }}>Payment Successful</h4>
+                      <p style={{ fontSize: 13.5, color: "#475569", margin: "0 0 20px", lineHeight: 1.4 }}>
+                        Your payment has been successfully completed. The question status has been updated.
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <svg className="error-crossmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" style={{ width: 64, height: 64, color: "#d32f2f", display: "block", margin: "0 auto 16px" }}>
+                        <circle cx="26" cy="26" r="25" fill="none" stroke="currentColor" strokeWidth="3" style={{ strokeDasharray: 157, strokeDashoffset: 157, animation: "drawCheck 0.5s ease-in-out 0.1s forwards" }}/>
+                        <path fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" d="M16 16l20 20M36 16L16 36" style={{ strokeDasharray: 48, strokeDashoffset: 48, animation: "drawCheck 0.3s ease-in-out 0.6s forwards" }}/>
+                      </svg>
+                      
+                      <h4 style={{ 
+                        fontSize: 18, 
+                        fontWeight: 800, 
+                        color: simulatedOutcome === "CANCELLED" ? "#616161" : simulatedOutcome === "INSUFFICIENT_BALANCE" ? "#ef6c00" : "#d32f2f", 
+                        margin: "0 0 6px" 
+                      }}>
+                        {simulatedOutcome === "FAILED" && "Payment Failed"}
+                        {simulatedOutcome === "CANCELLED" && "Payment Cancelled"}
+                        {simulatedOutcome === "INSUFFICIENT_BALANCE" && "Insufficient Funds"}
+                        {simulatedOutcome === "INVALID_CARD" && "Invalid Card Details"}
+                        {simulatedOutcome === "PIN_INCORRECT" && "Incorrect Mobile PIN"}
+                        {simulatedOutcome === "TIMEOUT" && "Gateway Timeout"}
+                        {simulatedOutcome === "DECLINED" && "Transaction Declined"}
+                      </h4>
+                      
+                      <p style={{ fontSize: 13.5, color: "#475569", margin: "0 0 20px", lineHeight: 1.4 }}>
+                        {simulatedOutcome === "FAILED" && "The payment transaction could not be completed. Please try again."}
+                        {simulatedOutcome === "CANCELLED" && "The transaction was cancelled. No charges were made."}
+                        {simulatedOutcome === "INSUFFICIENT_BALANCE" && "You do not have enough funds in your account to complete this transaction."}
+                        {simulatedOutcome === "INVALID_CARD" && "The card details provided were rejected by the issuing bank. Please verify and retry."}
+                        {simulatedOutcome === "PIN_INCORRECT" && "The Mobile Money PIN you entered is incorrect. Please authorize again."}
+                        {simulatedOutcome === "TIMEOUT" && "We were unable to reach the payment provider's network in time. Please retry."}
+                        {simulatedOutcome === "DECLINED" && "This transaction was declined by your bank/payment provider. Please contact your bank."}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Receipt Box */}
+                  <div style={{
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: 12,
+                    padding: 16,
+                    textAlign: "left",
+                    marginBottom: 24
+                  }}>
+                    <div className="receipt-row">
+                      <span style={{ color: "#64748b", fontWeight: 500 }}>Transaction Ref</span>
+                      <span style={{ fontWeight: 600, color: "#1e293b", fontFamily: "monospace" }}>{simulatedTxDetails.txRef}</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span style={{ color: "#64748b", fontWeight: 500 }}>Payment Method</span>
+                      <span style={{ fontWeight: 600, color: "#1e293b" }}>{simulatedTxDetails.method}</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span style={{ color: "#64748b", fontWeight: 500 }}>Amount</span>
+                      <span style={{ fontWeight: 700, color: "#1e293b" }}>{simulatedTxDetails.amount}</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span style={{ color: "#64748b", fontWeight: 500 }}>Date & Time</span>
+                      <span style={{ fontWeight: 600, color: "#1e293b" }}>{simulatedTxDetails.date}</span>
+                    </div>
+                    <div className="receipt-row">
+                      <span style={{ color: "#64748b", fontWeight: 500 }}>Status</span>
+                      <span style={{ 
+                        fontWeight: 700, 
+                        color: simulatedOutcome === "SUCCESS" ? "#2e7d32" : simulatedOutcome === "CANCELLED" ? "#616161" : "#d32f2f" 
+                      }}>
+                        {simulatedTxDetails.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Buttons */}
+                  {simulatedOutcome === "SUCCESS" ? (
+                    <button 
+                      className="btn btn-primary"
+                      style={{ width: "100%", justifyContent: "center", padding: "12px 0", borderRadius: 10 }}
+                      onClick={() => {
+                        setShowPaymentModal(false);
+                        setPaymentError("");
+                      }}
+                    >
+                      Return to Question
+                    </button>
+                  ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      <div style={{ display: "flex", gap: 12 }}>
+                        <button 
+                          className="btn btn-secondary"
+                          style={{ flex: 1, justifyContent: "center", borderRadius: 10 }}
+                          onClick={() => {
+                            setPaymentStep("SELECT");
+                            setPaymentError("");
+                            setSimulatedOutcome(null);
+                            setSimulatedTxDetails(null);
+                          }}
+                        >
+                          Change Method
+                        </button>
+                        <button 
+                          className="btn btn-primary"
+                          style={{ flex: 1.5, justifyContent: "center", borderRadius: 10 }}
+                          onClick={() => {
+                            setPaymentStep("DETAILS");
+                            setPaymentError("");
+                            setSimulatedOutcome(null);
+                            setSimulatedTxDetails(null);
+                          }}
+                        >
+                          Retry Payment
+                        </button>
+                      </div>
+                      <button 
+                        className="btn btn-ghost"
+                        style={{ width: "100%", justifyContent: "center", color: "#64748b" }}
+                        onClick={() => {
+                          setShowPaymentModal(false);
+                          setPaymentError("");
+                        }}
+                      >
+                        Cancel & Close
+                      </button>
+                    </div>
+                  )}
+
+                </div>
+              )}
+
             </div>
           </div>
         </div>
